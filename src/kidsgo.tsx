@@ -269,6 +269,20 @@ init_score_estimator()
     })
     .catch((err) => console.error(err));
 
+/*** Ensure we go to any games that are currently in progress ***/
+sockets.socket.on("active_game", (game: { id: number; phase: string }) => {
+    if (game.phase !== "play") {
+        // shouldn't happen
+        return;
+    }
+    if (window.location.pathname.startsWith(`/game/${game.id}`)) {
+        // if we're already on the game, don't do anything
+        return;
+    }
+
+    console.log("Need to go to game", game.id);
+});
+
 /*** Generic error handling from the server ***/
 sockets.socket.on("ERROR", console.error);
 
