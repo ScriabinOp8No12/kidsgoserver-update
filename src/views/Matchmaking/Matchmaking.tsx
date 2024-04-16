@@ -415,6 +415,7 @@ export function useEnsureUserIsCreated(): void {
             post("/api/v0/register/kidsgo")
                 .then((config) => {
                     data.set(cached.config, config);
+                    location.reload();
                 })
                 .catch((err) => {
                     console.error(err);

@@ -270,7 +270,10 @@ init_score_estimator()
     .catch((err) => console.error(err));
 
 /*** Generic error handling from the server ***/
-sockets.socket.on("ERROR", console.error);
+sockets.socket.on("ERROR", (msg) => {
+    console.error(msg);
+    location.reload();
+});
 
 /* Initialization done, render!! */
 const svg_loader = document.getElementById("loading-svg-container");
