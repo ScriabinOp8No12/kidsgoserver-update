@@ -41,6 +41,7 @@ import { ActiveGamesList } from "./ActiveGamesList";
 import { bots } from "bots";
 import { image_url } from "goban_themes";
 import { SignIn } from "SignIn";
+import { reload_page } from "reload_page";
 
 type ChallengeDetails = rest_api.ChallengeDetails;
 
@@ -415,7 +416,7 @@ export function useEnsureUserIsCreated(): void {
             post("/api/v0/register/kidsgo")
                 .then((config) => {
                     data.set(cached.config, config);
-                    location.reload();
+                    reload_page();
                 })
                 .catch((err) => {
                     console.error(err);

@@ -43,6 +43,7 @@ import { sfx } from "sfx";
 import { init_kidsgo_sfx } from "kidsgo-sfx";
 import { post } from "requests";
 import { ai_host } from "sockets";
+import { reload_page } from "reload_page";
 
 (window as any)["requests"] = requests;
 
@@ -282,7 +283,7 @@ init_score_estimator()
 /*** Generic error handling from the server ***/
 sockets.socket.on("ERROR", (msg) => {
     console.error(msg);
-    location.reload();
+    reload_page();
 });
 
 /* Initialization done, render!! */
