@@ -14,6 +14,7 @@
             "*": [
                 "*",
                 "src/lib/*",
+                "src/models/*",
                 "src/components/*",
                 "src/views/*",
                 "src/data/*",
@@ -26,13 +27,11 @@
                 "online-go.com/src/*",
                 "online-go.com/*"
             ],
-            "requests": [
-                "online-go.com/src/lib/requests"
-            ]
+            "requests": ["online-go.com/src/lib/requests"]
         },
 
         "forceConsistentCasingInFileNames": true,
-        
+
         "noImplicitAny": false,
         "noImplicitReturns": false,
         "noImplicitThis": false,
@@ -48,6 +47,16 @@
         "jsx": "react"
     },
     "files": [
-        "./src/kidsgo.tsx"
+        "./src/kidsgo.tsx",
+        "online-go.com/src/models/moderation.d.ts",
+        "online-go.com/src/models/challenges.d.ts",
+        "online-go.com/src/models/games.d.ts",
+        "online-go.com/src/models/moderation.d.ts",
+        "online-go.com/src/models/onlineleague.d.ts",
+        "online-go.com/src/models/overview.d.ts",
+        "online-go.com/src/models/puzzles.d.ts",
+        "online-go.com/src/models/tournaments.d.ts",
+        "online-go.com/src/models/user.d.ts",
+        "online-go.com/src/models/warning.d.ts"
     ]
 }

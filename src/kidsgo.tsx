@@ -17,10 +17,13 @@
 
 /// <reference path="../online-go.com/src/models/challenges.d.ts" />
 /// <reference path="../online-go.com/src/models/games.d.ts" />
+/// <reference path="../online-go.com/src/models/moderation.d.ts" />
+/// <reference path="../online-go.com/src/models/onlineleague.d.ts" />
 /// <reference path="../online-go.com/src/models/overview.d.ts" />
 /// <reference path="../online-go.com/src/models/puzzles.d.ts" />
 /// <reference path="../online-go.com/src/models/tournaments.d.ts" />
 /// <reference path="../online-go.com/src/models/user.d.ts" />
+/// <reference path="../online-go.com/src/models/warning.d.ts" />
 import * as _hacks from "./hacks";
 import * as Sentry from "@sentry/browser";
 import * as data from "data";
@@ -64,7 +67,7 @@ try {
         dsn: "https://55abcdda52904d7cb3456070c0f6acc1@o589780.ingest.sentry.io/5797436",
         release: kidsgo_version || "dev",
         tracesSampleRate: 1,
-        whitelistUrls: ["kidsgoserver.com", "beta.kidsgoserver.com", "dev.beta.kidsgoserver.com"],
+        allowUrls: ["kidsgoserver.com", "beta.kidsgoserver.com", "dev.beta.kidsgoserver.com"],
         environment: sentry_env,
         integrations: [
             new Sentry.Integrations.GlobalHandlers({
@@ -121,7 +124,13 @@ data.setDefault("config.user", {
     ranking: -100,
     country: "un",
     pro: 0,
-});
+    supporter: false,
+    is_moderator: false,
+    is_superuser: false,
+    is_tournament_moderator: false,
+    can_create_tournaments: false,
+    tournament_admin: false,
+} as any);
 
 data.setDefault("config.cdn", window["cdn_service"]);
 data.setDefault(
@@ -220,15 +229,16 @@ data.watch("config.user", (user) => {
     if (!user.anonymous) {
         auth_connect_fn = (): void => {
             sockets.socket.send("authenticate", {
-                auth: data.get("config.chat_auth"),
-                player_id: user.id,
-                username: user.username,
+                //auth: data.get("config.chat_auth"),
+                //player_id: user.id,
+                //username: user.username,
                 jwt: data.get("config.user_jwt"),
-                useragent: navigator.userAgent,
+                //useragent: navigator.userAgent,
                 language: kidsgo_current_language,
                 language_version: "",
                 client_version: kidsgo_version,
             });
+            /*
             sockets.socket.send("chat/connect", {
                 auth: data.get("config.chat_auth"),
                 player_id: user.id,
@@ -236,15 +246,18 @@ data.watch("config.user", (user) => {
                 username: user.username,
                 ui_class: user.ui_class,
             });
+            */
         };
     } else if (user.id < 0) {
         auth_connect_fn = (): void => {
+            /*
             sockets.socket.send("chat/connect", {
                 player_id: user.id,
                 ranking: user.ranking,
                 username: user.username,
                 ui_class: user.ui_class,
             });
+            */
         };
     }
     if (sockets.socket.connected) {

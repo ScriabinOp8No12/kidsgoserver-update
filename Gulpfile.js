@@ -73,7 +73,7 @@ function watch_eslint(done) {
 function lint(done) {
     return gulp
         .src(ts_sources)
-        .pipe(gulpEslint())
+        .pipe(gulpEslint({ overrideConfigFile: ".eslintrc.js" }))
         .pipe(gulpEslint.format())
         .pipe(gulpEslint.failAfterError());
 }

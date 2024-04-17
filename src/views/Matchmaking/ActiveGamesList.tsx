@@ -33,11 +33,11 @@ export function ActiveGamesList(props: ActiveGamesListProperties): JSX.Element {
             setActiveGamesCount(counts.live);
         };
         socket.on(`gamelist-count-kidsgo`, updateCounts);
-        socket.send("gamelist/count/subscribe", "kidsgo");
+        socket.send("gamelist/count/subscribe", { channel: "kidsgo" });
 
         return () => {
             socket.off(`gamelist-count-kidsgo`, updateCounts);
-            socket.send("gamelist/count/unsubscribe", "kidsgo");
+            socket.send("gamelist/count/unsubscribe", { channel: "kidsgo" });
         };
     }, []);
 

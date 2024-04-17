@@ -230,8 +230,8 @@ export function KidsGame(): JSX.Element {
 
         let t = setTimeout(() => {
             t = null;
-            const w = board_container_resizer.ref.current.clientWidth;
-            const h = board_container_resizer.ref.current.clientHeight;
+            const w = board_container_resizer.ref?.current?.clientWidth;
+            const h = board_container_resizer.ref?.current?.clientHeight;
             onResize(w, h);
         }, 10);
 
