@@ -18,6 +18,7 @@
 import * as React from "react";
 //import { Router, Route, Switch, Redirect } from "react-router-dom";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import * as data from "data";
 import { _ } from "translate";
@@ -30,9 +31,30 @@ import { Matchmaking } from "Matchmaking";
 import { LearnToPlay } from "LearnToPlay";
 import { ErrorBoundary } from "ErrorBoundary";
 import { CharacterSelection } from "CharacterSelection";
+import * as sockets from "sockets";
 
 /*** Layout our main view and routes ***/
 function Main(props): JSX.Element {
+    const navigate = useNavigate();
+
+    React.useEffect(() => {
+        /*** Ensure we go to any games that are currently in progress ***/
+        sockets.socket.on("active_game", (game: { id: number; phase: string }) => {
+            if (game.phase !== "play") {
+                // shouldn't happen
+                return;
+            }
+            if (window.location.pathname.startsWith(`/game/${game.id}`)) {
+                // if we're already on the game, don't do anything
+                return;
+            }
+
+            navigate(`/game/${game.id}`);
+
+            console.log("Need to go to game", game.id);
+        });
+    }, []);
+
     return <ErrorBoundary>{props.children}</ErrorBoundary>;
 }
 const PageNotFound = (props, state) => (

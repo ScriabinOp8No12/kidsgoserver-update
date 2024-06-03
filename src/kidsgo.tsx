@@ -17,10 +17,14 @@
 
 /// <reference path="../online-go.com/src/models/challenges.d.ts" />
 /// <reference path="../online-go.com/src/models/games.d.ts" />
+/// <reference path="../online-go.com/src/models/moderation.d.ts" />
+/// <reference path="../online-go.com/src/models/onlineleague.d.ts" />
 /// <reference path="../online-go.com/src/models/overview.d.ts" />
 /// <reference path="../online-go.com/src/models/puzzles.d.ts" />
 /// <reference path="../online-go.com/src/models/tournaments.d.ts" />
 /// <reference path="../online-go.com/src/models/user.d.ts" />
+/// <reference path="../online-go.com/src/models/warning.d.ts" />
+
 import * as _hacks from "./hacks";
 import * as Sentry from "@sentry/browser";
 import * as data from "data";
@@ -39,6 +43,7 @@ import { sfx } from "sfx";
 import { init_kidsgo_sfx } from "kidsgo-sfx";
 import { post } from "requests";
 import { ai_host } from "sockets";
+import { reload_page } from "reload_page";
 
 (window as any)["requests"] = requests;
 
@@ -64,7 +69,7 @@ try {
         dsn: "https://55abcdda52904d7cb3456070c0f6acc1@o589780.ingest.sentry.io/5797436",
         release: kidsgo_version || "dev",
         tracesSampleRate: 1,
-        whitelistUrls: ["kidsgoserver.com", "beta.kidsgoserver.com", "dev.beta.kidsgoserver.com"],
+        allowUrls: ["kidsgoserver.com", "beta.kidsgoserver.com", "dev.beta.kidsgoserver.com"],
         environment: sentry_env,
         integrations: [
             new Sentry.Integrations.GlobalHandlers({
@@ -94,7 +99,7 @@ try {
     console.log(e);
 }
 
-// Disable the desktop notifications preemptiely so we don't get the OGS
+// Disable the desktop notifications preemptively so we don't get the OGS
 // desktop notification toast prompt
 preferences.set("desktop-notifications", false);
 
@@ -121,7 +126,13 @@ data.setDefault("config.user", {
     ranking: -100,
     country: "un",
     pro: 0,
-});
+    supporter: false,
+    is_moderator: false,
+    is_superuser: false,
+    is_tournament_moderator: false,
+    can_create_tournaments: false,
+    tournament_admin: false,
+} as any);
 
 data.setDefault("config.cdn", window["cdn_service"]);
 data.setDefault(
@@ -213,46 +224,46 @@ try {
 }
 
 /** Connect to the chat service */
-let auth_connect_fn = () => {
-    return;
-};
-data.watch("config.user", (user) => {
-    if (!user.anonymous) {
-        auth_connect_fn = (): void => {
-            sockets.socket.send("authenticate", {
-                auth: data.get("config.chat_auth"),
-                player_id: user.id,
-                username: user.username,
-                jwt: data.get("config.user_jwt"),
-                useragent: navigator.userAgent,
-                language: kidsgo_current_language,
-                language_version: "",
-                client_version: kidsgo_version,
-            });
-            sockets.socket.send("chat/connect", {
-                auth: data.get("config.chat_auth"),
-                player_id: user.id,
-                ranking: user.ranking,
-                username: user.username,
-                ui_class: user.ui_class,
-            });
-        };
-    } else if (user.id < 0) {
-        auth_connect_fn = (): void => {
-            sockets.socket.send("chat/connect", {
-                player_id: user.id,
-                ranking: user.ranking,
-                username: user.username,
-                ui_class: user.ui_class,
-            });
-        };
-    }
-    if (sockets.socket.connected) {
-        auth_connect_fn();
+/** Connect to the chat service */
+for (const socket of [sockets.socket, sockets.ai_socket]) {
+    socket.authenticate({
+        jwt: data.get("config.user_jwt", ""),
+        device_id: get_device_id(),
+        user_agent: navigator.userAgent,
+        language: kidsgo_current_language,
+        language_version: "",
+        client_version: kidsgo_version,
+    });
+}
+
+data.watch("config.user_jwt", (jwt?: string) => {
+    if (sockets.ai_socket.connected) {
+        sockets.ai_socket.authenticate({
+            jwt: jwt ?? "",
+            device_id: get_device_id(),
+            user_agent: navigator.userAgent,
+            language: kidsgo_current_language,
+            language_version: "",
+            client_version: kidsgo_version,
+        });
     }
 });
-sockets.socket.on("connect", () => {
-    auth_connect_fn();
+
+sockets.socket.on("user/jwt", (jwt: string) => {
+    console.log("Updating JWT");
+    data.set("config.user_jwt", jwt);
+});
+
+sockets.socket.on("user/update", (user: any) => {
+    if (user.id === data.get("config.user")?.id) {
+        console.log("Updating user", user);
+        data.set("config.user", user);
+        player_cache.update(user);
+        data.set("user", user);
+        (window as any)["user"] = user;
+    } else {
+        console.log("Ignoring user update for user", user);
+    }
 });
 
 /*** Setup remote score estimation */
@@ -270,7 +281,10 @@ init_score_estimator()
     .catch((err) => console.error(err));
 
 /*** Generic error handling from the server ***/
-sockets.socket.on("ERROR", console.error);
+sockets.socket.on("ERROR", (msg) => {
+    console.error(msg);
+    reload_page();
+});
 
 /* Initialization done, render!! */
 const svg_loader = document.getElementById("loading-svg-container");
@@ -285,3 +299,12 @@ window["data"] = data;
 window["preferences"] = preferences;
 window["player_cache"] = player_cache;
 window["GoMath"] = GoMath;
+
+/***
+ * Setup a device UUID so we can logout other *devices* and not all other
+ * tabs with our new logout-other-devices button
+ */
+function get_device_id() {
+    const device_id = data.set("device.uuid", data.get("device.uuid", uuid()));
+    return device_id;
+}

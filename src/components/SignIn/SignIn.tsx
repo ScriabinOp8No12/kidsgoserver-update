@@ -20,6 +20,7 @@ import * as data from "data";
 import cached from "cached";
 import { post } from "requests";
 import { useUser } from "hooks";
+import { reload_page } from "reload_page";
 
 export function SignIn(): JSX.Element {
     const user = useUser();
@@ -45,7 +46,7 @@ export function SignIn(): JSX.Element {
                         .then((config) => {
                             data.set(cached.config, config);
                             console.log("should be ", config.user);
-                            window.location.reload();
+                            reload_page();
                         })
                         .catch((err) => {
                             console.error(err);

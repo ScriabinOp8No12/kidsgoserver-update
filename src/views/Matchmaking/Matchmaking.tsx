@@ -41,6 +41,7 @@ import { ActiveGamesList } from "./ActiveGamesList";
 import { bots } from "bots";
 import { image_url } from "goban_themes";
 import { SignIn } from "SignIn";
+import { reload_page } from "reload_page";
 
 type ChallengeDetails = rest_api.ChallengeDetails;
 
@@ -209,7 +210,7 @@ export function Matchmaking(): JSX.Element {
                         socket.send("game/disconnect", { game_id: game_id });
                     }
                     //socket.off(`game/${game_id}/gamedata`, onGamedata);
-                    socket.off(`game/${game_id}/rejected`, onRejected);
+                    //socket.off(`game/${game_id}/rejected`, onRejected);
                     notification_manager.event_emitter.off("notification", checkForReject);
                     closePopup();
                 }
@@ -415,6 +416,7 @@ export function useEnsureUserIsCreated(): void {
             post("/api/v0/register/kidsgo")
                 .then((config) => {
                     data.set(cached.config, config);
+                    reload_page();
                 })
                 .catch((err) => {
                     console.error(err);
@@ -459,7 +461,7 @@ function CheckForChallengeReceived(): JSX.Element {
     }, []);
 
     const accept = () => {
-        post("me/challenges/%%/accept", active_challenge.current.challenge_id, {})
+        post(`me/challenges/${active_challenge.current.challenge_id}/accept`, {})
             .then(() => {
                 if (active_challenge.current) {
                     navigate(`/game/${active_challenge.current.game_id}`);
@@ -473,7 +475,7 @@ function CheckForChallengeReceived(): JSX.Element {
     };
 
     const decline = () => {
-        del("me/challenges/%%", active_challenge.current.challenge_id)
+        del(`me/challenges/${active_challenge.current.challenge_id}`)
             .then(() => {
                 active_challenge.current = null;
                 refresh(Math.random());
