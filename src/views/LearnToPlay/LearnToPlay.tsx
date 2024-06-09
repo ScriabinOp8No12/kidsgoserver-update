@@ -40,18 +40,21 @@ export function LearnToPlay(): JSX.Element {
                 <div className="back-background" />
                 <div className="background">
                     <ChapterButton chapter={1} />
-                    <div className="chapter-text chapter-1-text">Capturing is fun!</div>
+                    <div className="chapter-text chapter-1-text">Capturing Stones</div>
                     <ChapterButton chapter={2} />
-                    <div className="chapter-text chapter-2-text">Quest for Territory</div>
+                    <div className="chapter-text chapter-2-text">Quest for Space</div>
                     <ChapterButton chapter={3} />
-                    <div className="chapter-text chapter-3-text">Everyone Wants 2 Eyes</div>
+                    <div className="chapter-text chapter-3-text">Eyes for Life</div>
                     <ChapterButton chapter={4} />
                     <div className="chapter-text chapter-4-text">Ko Battles</div>
                     <ChapterButton chapter={5} />
-                    <div className="chapter-text chapter-5-text">Magic of a Single Move</div>
+                    <div className="chapter-text chapter-5-text">Magic Moves</div>
                     <ChapterButton chapter={6} />
+                    <div className="chapter-text chapter-6-text">Coming Soon</div>
                     <ChapterButton chapter={7} />
+                    <div className="chapter-text chapter-7-text">Coming Soon</div>
                     <ChapterButton chapter={8} />
+                    <div className="chapter-text chapter-8-text">Coming Soon</div>
                 </div>
             </div>
             <div className="spacer" />
