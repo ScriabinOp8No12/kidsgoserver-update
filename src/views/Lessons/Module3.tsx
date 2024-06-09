@@ -237,12 +237,12 @@ class Page5 extends Module3 {
             puzzle_player_move_mode: "fixed",
             initial_state: {
                 black: "e7e6f6f5g5",
-                white: "d7d6e5f4g4d4g7",
+                white: "d7d6e5f4g4d4",
             },
         };
     }
     onSetGoban(goban: Goban): void {
-        this.delay(() => goban.editPlaceByPrettyCoord("g7", JGOFNumericPlayerColor.WHITE), 2000);
+        this.delay(() => goban.editPlaceByPrettyCoord("g7", JGOFNumericPlayerColor.WHITE), 1500);
     }
 }
 
