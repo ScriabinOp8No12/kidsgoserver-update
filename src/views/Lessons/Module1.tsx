@@ -47,6 +47,11 @@ class Module1 extends Content {
             audio.pause();
             audio.currentTime = 0;
         }
+        // Clean up the delay of stone animations, otherwise it'll persist across rerenders and cause weird side effects
+        Object.keys(this.delays).forEach((key) => {
+            clearTimeout(this.delays[key]);
+            delete this.delays[key];
+        });
     }
 }
 
@@ -80,10 +85,14 @@ class Page1 extends Module1 {
         return {
             puzzle_player_move_mode: "fixed",
             initial_state: {
-                black: "d4",
+                black: "",
                 white: "",
             },
         };
+    }
+    onSetGoban(goban: Goban): void {
+        this.delay(() => goban.editPlaceByPrettyCoord("d4", JGOFNumericPlayerColor.BLACK));
+        this.delay(() => goban.editPlaceByPrettyCoord("e4", JGOFNumericPlayerColor.WHITE), 10000); // 10 second delay to align the white stone appearing with the word "followed"
     }
 }
 
