@@ -43,6 +43,10 @@ class Module2 extends Content {
             audio.pause();
             audio.currentTime = 0;
         }
+        Object.keys(this.delays).forEach((key) => {
+            clearTimeout(this.delays[key]);
+            delete this.delays[key];
+        });
     }
 }
 

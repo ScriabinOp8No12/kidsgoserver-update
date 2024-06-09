@@ -45,6 +45,10 @@ class Module3 extends Content {
             audio.pause();
             audio.currentTime = 0;
         }
+        Object.keys(this.delays).forEach((key) => {
+            clearTimeout(this.delays[key]);
+            delete this.delays[key];
+        });
     }
 }
 
@@ -73,7 +77,7 @@ class Page1 extends Module3 {
             </p>,
             <p>
                 Remember that taking a stone's last liberty will capture it. White cannot play at
-                the triangled point because the stones wouldn't have any liberties.
+                the triangled point because the stone wouldn't have any liberties.
             </p>,
         ];
     }
@@ -238,8 +242,7 @@ class Page5 extends Module3 {
         };
     }
     onSetGoban(goban: Goban): void {
-        //goban.setMarkByPrettyCoord("f7g6", "triangle");
-        goban.setMarkByPrettyCoord("g7", "1");
+        this.delay(() => goban.editPlaceByPrettyCoord("g7", JGOFNumericPlayerColor.WHITE), 2000);
     }
 }
 
@@ -322,11 +325,12 @@ class Page7 extends Module3 {
     }
     onSetGoban(goban: Goban): void {
         this.delay(() => {
-            goban.placeByPrettyCoord("f7");
+            goban.setMarkByPrettyCoord("f7", "A");
         });
-        this.delay(() => goban.setMarkByPrettyCoord("g6", "1"));
-        this.delay(() => goban.setMarkByPrettyCoord("f6", "2"));
-        this.delay(() => goban.setMarkByPrettyCoord("e7", "3"));
+        this.delay(() => goban.placeByPrettyCoord("f7"), 6000);
+        this.delay(() => goban.setMarkByPrettyCoord("g6", "1"), 2500);
+        this.delay(() => goban.setMarkByPrettyCoord("f6", "2"), 1250);
+        this.delay(() => goban.setMarkByPrettyCoord("e7", "3"), 1250);
     }
 }
 
@@ -400,12 +404,15 @@ class Page9 extends Module3 {
             puzzle_player_move_mode: "fixed",
             initial_state: {
                 black: "e7e6f6f5g5",
-                white: "d7d6e5f4g4d4g7g6",
+                white: "d7d6e5f4g4d4g7",
             },
         };
     }
     onSetGoban(goban: Goban): void {
-        goban.setMarkByPrettyCoord("g6", "1");
+        this.delay(() => {
+            goban.editPlaceByPrettyCoord("g6", JGOFNumericPlayerColor.WHITE);
+            goban.setMarkByPrettyCoord("g6", "1");
+        }, 9000);
     }
 }
 
