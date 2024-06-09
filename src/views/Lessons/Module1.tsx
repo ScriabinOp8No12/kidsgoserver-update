@@ -176,7 +176,7 @@ class Page3 extends Module1 {
     }
     onSetGoban(goban: Goban): void {
         this.delay(() => goban.setMarkByPrettyCoord("f7", "1"), 3000);
-        this.delay(() => goban.setMarkByPrettyCoord("g6", "2"), 1000);
+        this.delay(() => goban.setMarkByPrettyCoord("g6", "2"));
     }
 }
 

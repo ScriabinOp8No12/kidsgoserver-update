@@ -115,7 +115,7 @@ class Page2 extends Module2 {
         };
     }
     onSetGoban(goban: Goban): void {
-        this.delay(() => goban.setMarkByPrettyCoord("f7", "1"));
+        this.delay(() => goban.setMarkByPrettyCoord("f7", "1"), 7250);
         this.delay(() => goban.setMarkByPrettyCoord("g7", "2"));
         this.delay(() => goban.setMarkByPrettyCoord("f6", "3"));
         this.delay(() => goban.setMarkByPrettyCoord("g6", "4"));
@@ -354,10 +354,8 @@ class Page8 extends Module2 {
     onSetGoban(goban: Goban): void {
         this.delay(() => goban.editPlaceByPrettyCoord("b5", JGOFNumericPlayerColor.WHITE));
         this.delay(() => goban.editPlaceByPrettyCoord("b6", JGOFNumericPlayerColor.WHITE));
-        this.delay(() => goban.editPlaceByPrettyCoord("b2", JGOFNumericPlayerColor.WHITE));
-        this.delay(() => goban.editPlaceByPrettyCoord("h5", JGOFNumericPlayerColor.BLACK));
+        this.delay(() => goban.editPlaceByPrettyCoord("h5", JGOFNumericPlayerColor.BLACK), 3000);
         this.delay(() => goban.editPlaceByPrettyCoord("h3", JGOFNumericPlayerColor.BLACK));
-        this.delay(() => goban.editPlaceByPrettyCoord("g8", JGOFNumericPlayerColor.BLACK));
     }
 }
 
