@@ -35,6 +35,10 @@ class Module5 extends Content {
         if (audio) {
             await audio.play();
         }
+        Object.keys(this.delays).forEach((key) => {
+            clearTimeout(this.delays[key]);
+            delete this.delays[key];
+        });
     };
 
     componentWillUnmount() {
@@ -151,15 +155,18 @@ class Page3 extends Module5 {
             width: 9,
             height: 9,
             initial_state: {
-                black: "f7g6f8",
+                black: "f7g6",
                 white: "e7f6g5g7",
             },
         };
     }
     onSetGoban(goban: Goban): void {
         goban.setMarkByPrettyCoord("g7", "1");
-        goban.setMarkByPrettyCoord("f8", "2");
-        // These 3 below triangles are not in the instructions, but I think would be helpful for visual purposes
+        this.delay(() => {
+            goban.placeByPrettyCoord("f8");
+            goban.setMarkByPrettyCoord("f8", "2");
+            goban.setMarkByPrettyCoord("g7", "1"); // This is needed to keep the marked 1 on the white stone
+        }, 1500);
         this.delay(() => goban.setMarkByPrettyCoord("e8", "triangle"));
         this.delay(() => goban.setMarkByPrettyCoord("f9", "triangle"));
         this.delay(() => goban.setMarkByPrettyCoord("g8", "triangle"));
@@ -279,17 +286,24 @@ class Page6 extends Module5 {
             width: 9,
             height: 9,
             initial_state: {
-                black: "f7f8e8d7",
-                white: "e7f6g5g7h6g8d8",
+                black: "f7f8e8",
+                white: "e7f6g5g7h6g8",
             },
         };
     }
     onSetGoban(goban: Goban): void {
         goban.setMarkByPrettyCoord("g8", "1");
         goban.setMarkByPrettyCoord("e8", "2");
-        goban.setMarkByPrettyCoord("d8", "3");
-        goban.setMarkByPrettyCoord("d7", "4");
-        goban.setMarkByPrettyCoord("e7", "A");
+        this.delay(() => {
+            goban.editPlaceByPrettyCoord("d8", JGOFNumericPlayerColor.WHITE);
+            goban.setMarkByPrettyCoord("d8", "3");
+        }, 4000);
+        this.delay(() => {
+            goban.editPlaceByPrettyCoord("d7", JGOFNumericPlayerColor.BLACK);
+            goban.setMarkByPrettyCoord("d8", "3");
+            goban.setMarkByPrettyCoord("d7", "4");
+            goban.setMarkByPrettyCoord("e7", "A");
+        });
     }
 }
 
@@ -527,7 +541,6 @@ class Page12 extends Module5 {
             initial_player: "white",
             flip_animated_capture_color: true,
             initial_state: {
-                //black: "d7c8",
                 black: "f7f8e8d7c8e9",
                 white: "e7f6g5g7h6g8d8e6d9",
             },
@@ -535,13 +548,12 @@ class Page12 extends Module5 {
     }
     onSetGoban(goban: Goban): void {
         goban.setMarkByPrettyCoord("f9", "C");
-        //goban.setMarkByPrettyCoord("e9e8f8f7", "square");
 
         this.delay(() => {
             goban.placeByPrettyCoord("f9");
             goban.setMarkByPrettyCoord("f9", "C");
             goban.setMarkByPrettyCoord("e9e8f8f7", "square");
-        }, 3000);
+        }, 9500);
     }
 }
 

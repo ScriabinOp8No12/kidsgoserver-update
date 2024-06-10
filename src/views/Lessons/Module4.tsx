@@ -43,6 +43,10 @@ class Module4 extends Content {
             audio.pause();
             audio.currentTime = 0;
         }
+        Object.keys(this.delays).forEach((key) => {
+            clearTimeout(this.delays[key]);
+            delete this.delays[key];
+        });
     }
 }
 
@@ -321,14 +325,14 @@ class Page7 extends Module4 {
             goban.setMarkByPrettyCoord("d4", "triangle");
             goban.setMarkByPrettyCoord("e4", "1");
             goban.setMarkByPrettyCoord("e2", "2");
-        });
+        }, 6000);
         this.delay(() => {
             goban.engine.editPlace(4, 1, JGOFNumericPlayerColor.BLACK);
             goban.setMarkByPrettyCoord("d4", "triangle");
             goban.setMarkByPrettyCoord("e4", "1");
             goban.setMarkByPrettyCoord("e2", "2");
             goban.setMarkByPrettyCoord("e6", "3");
-        });
+        }, 2500);
     }
 }
 
