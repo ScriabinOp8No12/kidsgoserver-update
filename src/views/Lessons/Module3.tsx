@@ -275,16 +275,16 @@ class Page6 extends Module3 {
         return {
             puzzle_player_move_mode: "fixed",
             initial_state: {
-                black: "e7e6f6f5g5g6",
+                black: "e7e6f6f5g5",
                 white: "d7d6e5f4g4d4g7",
             },
         };
     }
     onSetGoban(goban: Goban): void {
-        //goban.setMarkByPrettyCoord("f7g6", "triangle");
-        goban.setMarkByPrettyCoord("g7g6", "1");
         goban.setMarkByPrettyCoord("g6", "2");
-        goban.setMarkByPrettyCoord("f7", "A");
+        this.delay(() => goban.placeByPrettyCoord("g6"), 3000);
+        this.delay(() => goban.setMarkByPrettyCoord("g6", "2"), 0); // can't get this to work without using this.delay for some reason
+        this.delay(() => goban.setMarkByPrettyCoord("f7", "A"));
     }
 }
 
@@ -492,7 +492,7 @@ class Page11 extends Module3 {
         this.delay(() => {
             goban.placeByPrettyCoord("f7");
             goban.setMarkByPrettyCoord("f7", "1");
-        });
+        }, 1750);
     }
 }
 
