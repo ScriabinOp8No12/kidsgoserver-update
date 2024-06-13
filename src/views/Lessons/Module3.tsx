@@ -39,16 +39,11 @@ class Module3 extends Content {
     };
 
     componentWillUnmount() {
-        // Stop audio playback and cleanup when the component is about to unmount
         const audio = this.audioRef.current;
         if (audio) {
             audio.pause();
             audio.currentTime = 0;
         }
-        Object.keys(this.delays).forEach((key) => {
-            clearTimeout(this.delays[key]);
-            delete this.delays[key];
-        });
     }
 }
 
@@ -165,7 +160,6 @@ class Page3 extends Module3 {
             },
         };
     }
-    // Added triangles here to this goban view
     onSetGoban(goban: Goban): void {
         goban.setMarkByPrettyCoord("f7g6", "triangle");
     }
@@ -282,8 +276,10 @@ class Page6 extends Module3 {
     }
     onSetGoban(goban: Goban): void {
         goban.setMarkByPrettyCoord("g6", "2");
-        this.delay(() => goban.placeByPrettyCoord("g6"), 3000);
-        this.delay(() => goban.setMarkByPrettyCoord("g6", "2"), 0); // can't get this to work without using this.delay for some reason
+        this.delay(() => {
+            goban.placeByPrettyCoord("g6");
+            goban.setMarkByPrettyCoord("g6", "2");
+        }, 3000);
         this.delay(() => goban.setMarkByPrettyCoord("f7", "A"));
     }
 }
@@ -328,9 +324,9 @@ class Page7 extends Module3 {
             goban.setMarkByPrettyCoord("f7", "A");
         });
         this.delay(() => goban.placeByPrettyCoord("f7"), 6000);
-        this.delay(() => goban.setMarkByPrettyCoord("g6", "1"), 2500);
-        this.delay(() => goban.setMarkByPrettyCoord("f6", "2"), 1250);
-        this.delay(() => goban.setMarkByPrettyCoord("e7", "3"), 1250);
+        this.delay(() => goban.setMarkByPrettyCoord("g6", "1"), 3000);
+        this.delay(() => goban.setMarkByPrettyCoord("f6", "2"));
+        this.delay(() => goban.setMarkByPrettyCoord("e7", "3"));
     }
 }
 
@@ -610,7 +606,6 @@ class Page14 extends Module3 {
                 autoPlay={true}
                 src={this.audioUrl}
             ></audio>,
-            // Dropbox says we don't have a 15th page for module 3, but that doesn't really make sense, I think having the animal mascot thingy for the 15th page, saying good job is nice
             <p>
                 Looking again, we see that the placement of a single stone can make all the
                 difference. Playing at A is the key point for both sides.

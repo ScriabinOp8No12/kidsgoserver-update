@@ -35,14 +35,9 @@ class Module5 extends Content {
         if (audio) {
             await audio.play();
         }
-        Object.keys(this.delays).forEach((key) => {
-            clearTimeout(this.delays[key]);
-            delete this.delays[key];
-        });
     };
 
     componentWillUnmount() {
-        // Stop audio playback and cleanup when the component is about to unmount
         const audio = this.audioRef.current;
         if (audio) {
             audio.pause();
@@ -303,7 +298,7 @@ class Page6 extends Module5 {
             goban.setMarkByPrettyCoord("d8", "3");
             goban.setMarkByPrettyCoord("d7", "4");
             goban.setMarkByPrettyCoord("e7", "A");
-        });
+        }, 2000);
     }
 }
 

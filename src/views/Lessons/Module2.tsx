@@ -37,16 +37,11 @@ class Module2 extends Content {
     };
 
     componentWillUnmount() {
-        // Stop audio playback and cleanup when the component is about to unmount
         const audio = this.audioRef.current;
         if (audio) {
             audio.pause();
             audio.currentTime = 0;
         }
-        Object.keys(this.delays).forEach((key) => {
-            clearTimeout(this.delays[key]);
-            delete this.delays[key];
-        });
     }
 }
 
@@ -254,7 +249,6 @@ class Page6 extends Module2 {
                 src={this.audioUrl}
             ></audio>,
             <p>The answer is 9 points for Blue.</p>,
-            // This wasn't an array originally, but we need this following paragraph added.
             <p>Remember, you only need to build your fence up to the edge of the board. </p>,
         ];
     }
@@ -302,7 +296,7 @@ class Page7 extends Module2 {
             ></audio>,
             <p>
                 In Go, we play until the two colors are touching each other, and the empty space
-                each blocks off and surrounds is their territory.{" "}
+                each blocks off and surrounds is their territory.
             </p>,
         ];
     }
