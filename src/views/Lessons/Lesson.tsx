@@ -266,7 +266,6 @@ export function Lesson({ chapter, page }: { chapter: number; page: number }): JS
             goban_opts_ref.current = null;
             clearTimeout(animation_interval);
             hup(Math.random());
-            // Stop and reset audio
             if (audioRef.current) {
                 audioRef.current.pause();
                 audioRef.current.currentTime = 0;
@@ -285,8 +284,6 @@ export function Lesson({ chapter, page }: { chapter: number; page: number }): JS
             setIsPlayingAudio(!isPlayingAudio);
         }
     };
-
-    console.log("isPlayingAudio VALUE", isPlayingAudio);
 
     return (
         <>
