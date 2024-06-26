@@ -25,11 +25,15 @@ const POPUP_TIMEOUT = 3000;
 
 class Module1 extends Content {
     audioRef: React.RefObject<HTMLAudioElement>;
+    // audioRef: React.RefObject<HTMLAudioElement>;
     audioUrl: string;
 
     constructor(audioUrl: string) {
+        // constructor(audioUrl: string, audioRef: React.RefObject<HTMLAudioElement>) {
         super();
-        this.audioRef = React.createRef();
+        // super(audioRef);
+        this.audioRef = this.audioRef;
+        // this.audioRef = audioRef;
         this.audioUrl = audioUrl;
     }
 
@@ -57,16 +61,18 @@ class Module1 extends Content {
 
 class Page1 extends Module1 {
     constructor() {
+        // constructor(audioRef: React.RefObject<HTMLAudioElement>) {
         super(
             "https://res.cloudinary.com/dn8rdavoi/video/upload/v1708472624/audio-slice-less-pauses-COMBINED/slice1_and_2_combined_wxolf5.mp3",
+            // audioRef,
         );
     }
 
     text(): JSX.Element | Array<JSX.Element> {
         return [
-            <button key="playButton" onClick={this.playAudio}>
-                Play Audio
-            </button>,
+            // <button key="playButton" onClick={this.playAudio}>
+            //     Play Audio
+            // </button>,
             <audio
                 key="audioElement"
                 ref={this.audioRef}

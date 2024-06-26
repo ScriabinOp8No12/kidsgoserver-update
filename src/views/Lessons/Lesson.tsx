@@ -67,6 +67,7 @@ export function Lesson({ chapter, page }: { chapter: number; page: number }): JS
     const [container, _setContainer] = useState(document.createElement("div"));
     const goban_ref = useRef<Goban>(null);
     const cancel_animation_ref = useRef<() => void>(() => {});
+    const audioRef = useRef<HTMLAudioElement>(null); // ADDED THIS
     const goban_opts_ref = useRef<any>({});
     const [text, setText]: [Array<JSX.Element>, (x: Array<JSX.Element>) => void] = useState<
         Array<JSX.Element>
@@ -76,6 +77,7 @@ export function Lesson({ chapter, page }: { chapter: number; page: number }): JS
     const [showAxotol, setShowAxotol]: [boolean, (x: boolean) => void] = useState<boolean>(false);
     const [hidePlayButton, setHidePlayButton]: [boolean, (x: boolean) => void] =
         useState<boolean>(false);
+    const [isPlayingAudio, setIsPlayingAudio] = useState(true); // ADDED THIS -> audio starts off as true
     const onResize = useCallback((width, height) => {
         const goban = goban_ref.current;
         if (goban) {
@@ -101,6 +103,7 @@ export function Lesson({ chapter, page }: { chapter: number; page: number }): JS
     useEffect(() => {
         console.log("Constructing game ", chapter, page);
         const content = new chapters[chapter][page]();
+        // const content = new chapters[chapter][page](audioRef);
 
         let ct = 0;
 
@@ -258,8 +261,35 @@ export function Lesson({ chapter, page }: { chapter: number; page: number }): JS
             goban_opts_ref.current = null;
             clearTimeout(animation_interval);
             hup(Math.random());
+            // Stop and reset audio
+            if (audioRef.current) {
+                audioRef.current.pause();
+                audioRef.current.currentTime = 0;
+            }
         };
-    }, [chapter, page, replay]);
+    }, [chapter, page, replay, isPlayingAudio]);
+
+    const toggleAudio = async () => {
+        const audio = audioRef?.current;
+
+        if (isPlayingAudio) {
+            // console.log("hit here 1.");
+            // if (audio) {
+            //     console.log("hit here 2.");
+            //     console.log("audioRef.current 22222", audioRef.current);
+            //     audio.pause();
+            //     audio.currentTime = 0;
+            // }
+            setIsPlayingAudio(false);
+        } else {
+            // if (audio) {
+            //     await audio.play();
+            // }
+            setIsPlayingAudio(true);
+        }
+    };
+
+    console.log("isPlayingAudio VALUE", isPlayingAudio);
 
     return (
         <>
@@ -270,11 +300,26 @@ export function Lesson({ chapter, page }: { chapter: number; page: number }): JS
                 <div id="Lesson-bottom-container">
                     <div id="left-container">
                         <div className="explanation-text" onClick={cancel_animation_ref.current}>
-                            {text.map((e, idx) => (
+                            <button onClick={toggleAudio}>
+                                {isPlayingAudio ? "Stop Audio" : "Play Audio"}
+                            </button>
+                            {/* <audio
+                                key="audioElement"
+                                ref={audioRef}
+                                style={{ visibility: "hidden" }}
+                                autoPlay={true} // This line auto plays the audio when we click the next button to navigate to the next page
+                                // src={audioUrl}
+                            ></audio> */}
+                            {/* <audio
+                                ref={audioRef}
+                                style={{ visibility: "hidden" }}
+                            ></audio> */}
+                            {text}
+                            {/* {text.map((e, idx) => (
                                 <div className="fade-in" key={idx}>
                                     {e}
                                 </div>
-                            ))}
+                            ))} */}
                         </div>
                         <div className="bottom-graphic" />
                     </div>

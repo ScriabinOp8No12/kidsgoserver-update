@@ -36,9 +36,12 @@ export class Content extends TypedEventEmitter<Events> {
     goban?: Goban;
     current_delay: number = 0;
     next_path: string = "";
+    // audioRef: React.RefObject<HTMLAudioElement>;
 
     constructor() {
+        // constructor(audioRef: React.RefObject<HTMLAudioElement>) {
         super();
+        // this.audioRef = audioRef;
     }
 
     text(): JSX.Element | Array<JSX.Element> {
