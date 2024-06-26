@@ -77,7 +77,7 @@ export function Lesson({ chapter, page }: { chapter: number; page: number }): JS
     const [showAxotol, setShowAxotol]: [boolean, (x: boolean) => void] = useState<boolean>(false);
     const [hidePlayButton, setHidePlayButton]: [boolean, (x: boolean) => void] =
         useState<boolean>(false);
-    const [isPlayingAudio, setIsPlayingAudio] = useState(true);
+    const [isPlayingAudio, setIsPlayingAudio] = useState(false);
     const onResize = useCallback((width, height) => {
         const goban = goban_ref.current;
         if (goban) {
@@ -102,7 +102,7 @@ export function Lesson({ chapter, page }: { chapter: number; page: number }): JS
 
     useEffect(() => {
         console.log("Constructing game ", chapter, page);
-        const content = new chapters[chapter][page]();
+        const content = new chapters[chapter][page](isPlayingAudio);
 
         if (audioRef.current) {
             audioRef.current.src = content.audioUrl;

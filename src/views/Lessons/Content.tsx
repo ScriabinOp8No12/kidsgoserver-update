@@ -37,9 +37,11 @@ export class Content extends TypedEventEmitter<Events> {
     current_delay: number = 0;
     next_path: string = "";
     audioUrl: string = "";
+    isPlayingAudio: boolean;
 
-    constructor() {
+    constructor(isPlayingAudio: boolean = true) {
         super();
+        this.isPlayingAudio = isPlayingAudio;
     }
 
     text(): JSX.Element | Array<JSX.Element> {
