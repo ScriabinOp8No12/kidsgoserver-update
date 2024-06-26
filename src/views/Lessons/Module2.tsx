@@ -20,28 +20,10 @@ import { Content } from "./Content";
 import { PuzzleConfig, Goban, JGOFNumericPlayerColor } from "goban";
 
 class Module2 extends Content {
-    audioRef: React.RefObject<HTMLAudioElement>;
-    audioUrl: string;
 
     constructor(audioUrl: string) {
         super();
-        this.audioRef = React.createRef();
         this.audioUrl = audioUrl;
-    }
-
-    playAudio = async () => {
-        const audio = this.audioRef.current;
-        if (audio) {
-            await audio.play();
-        }
-    };
-
-    componentWillUnmount() {
-        const audio = this.audioRef.current;
-        if (audio) {
-            audio.pause();
-            audio.currentTime = 0;
-        }
     }
 }
 
@@ -53,16 +35,6 @@ class Page1 extends Module2 {
     }
     text(): JSX.Element | Array<JSX.Element> {
         return [
-            <button key="playButton" onClick={this.playAudio}>
-                Play Audio
-            </button>,
-            <audio
-                key="audioElement"
-                ref={this.audioRef}
-                style={{ visibility: "hidden" }}
-                autoPlay={true}
-                src={this.audioUrl}
-            ></audio>,
             <span>
                 Based on the last lesson you might think the goal of this game is to capture stones,
                 but actually whoever surrounds the most territory at the end of the game wins.
@@ -88,16 +60,6 @@ class Page2 extends Module2 {
     }
     text(): JSX.Element | Array<JSX.Element> {
         return [
-            <button key="playButton" onClick={this.playAudio}>
-                Play Audio
-            </button>,
-            <audio
-                key="audioElement"
-                ref={this.audioRef}
-                style={{ visibility: "hidden" }}
-                autoPlay={true}
-                src={this.audioUrl}
-            ></audio>,
             <p>
                 Territory is the empty space we surround. Here is one kind of territory using the
                 edge of the board. There are four points of territory in the corner.
@@ -131,16 +93,6 @@ class Page3 extends Module2 {
     }
     text(): JSX.Element | Array<JSX.Element> {
         return [
-            <button key="playButton" onClick={this.playAudio}>
-                Play Audio
-            </button>,
-            <audio
-                key="audioElement"
-                ref={this.audioRef}
-                style={{ visibility: "hidden" }}
-                autoPlay={true}
-                src={this.audioUrl}
-            ></audio>,
             <p>
                 Here is another kind of territory, made by surrounding space in the middle. How many
                 points of territory does Blue have here?
@@ -166,16 +118,6 @@ class Page4 extends Module2 {
     }
     text(): JSX.Element | Array<JSX.Element> {
         return [
-            <button key="playButton" onClick={this.playAudio}>
-                Play Audio
-            </button>,
-            <audio
-                key="audioElement"
-                ref={this.audioRef}
-                style={{ visibility: "hidden" }}
-                autoPlay={true}
-                src={this.audioUrl}
-            ></audio>,
             <p>Four points is right.</p>,
         ];
     }
@@ -204,16 +146,6 @@ class Page5 extends Module2 {
     }
     text(): JSX.Element | Array<JSX.Element> {
         return [
-            <button key="playButton" onClick={this.playAudio}>
-                Play Audio
-            </button>,
-            <audio
-                key="audioElement"
-                ref={this.audioRef}
-                style={{ visibility: "hidden" }}
-                autoPlay={true}
-                src={this.audioUrl}
-            ></audio>,
             <p>How many points does Blue have here?</p>,
         ];
     }
@@ -238,16 +170,6 @@ class Page6 extends Module2 {
     }
     text(): JSX.Element | Array<JSX.Element> {
         return [
-            <button key="playButton" onClick={this.playAudio}>
-                Play Audio
-            </button>,
-            <audio
-                key="audioElement"
-                ref={this.audioRef}
-                style={{ visibility: "hidden" }}
-                autoPlay={true}
-                src={this.audioUrl}
-            ></audio>,
             <p>The answer is 9 points for Blue.</p>,
             <p>Remember, you only need to build your fence up to the edge of the board. </p>,
         ];
@@ -284,16 +206,6 @@ class Page7 extends Module2 {
     }
     text(): JSX.Element | Array<JSX.Element> {
         return [
-            <button key="playButton" onClick={this.playAudio}>
-                Play Audio
-            </button>,
-            <audio
-                key="audioElement"
-                ref={this.audioRef}
-                style={{ visibility: "hidden" }}
-                autoPlay={true}
-                src={this.audioUrl}
-            ></audio>,
             <p>
                 In Go, we play until the two colors are touching each other, and the empty space
                 each blocks off and surrounds is their territory.
@@ -321,16 +233,6 @@ class Page8 extends Module2 {
     }
     text(): JSX.Element | Array<JSX.Element> {
         return [
-            <button key="playButton" onClick={this.playAudio}>
-                Play Audio
-            </button>,
-            <audio
-                key="audioElement"
-                ref={this.audioRef}
-                style={{ visibility: "hidden" }}
-                autoPlay={true}
-                src={this.audioUrl}
-            ></audio>,
             <p>Can White play on Blue's side? Yes.</p>,
             <p>Can Blue play on White's side? Yes.</p>,
             <p>
@@ -368,16 +270,6 @@ class Page9 extends Module2 {
     }
     text(): JSX.Element | Array<JSX.Element> {
         return [
-            <button key="playButton" onClick={this.playAudio}>
-                Play Audio
-            </button>,
-            <audio
-                key="audioElement"
-                ref={this.audioRef}
-                style={{ visibility: "hidden" }}
-                autoPlay={true}
-                src={this.audioUrl}
-            ></audio>,
             <p>
                 If you think the game is over, just pass a stone to your opponent. If your opponent
                 plays a stone then you can either play or pass.
@@ -409,16 +301,6 @@ class Page10 extends Module2 {
     }
     text(): JSX.Element | Array<JSX.Element> {
         return [
-            <button key="playButton" onClick={this.playAudio}>
-                Play Audio
-            </button>,
-            <audio
-                key="audioElement"
-                ref={this.audioRef}
-                style={{ visibility: "hidden" }}
-                autoPlay={true}
-                src={this.audioUrl}
-            ></audio>,
             <p>Blue has territory on the left, and White has it on the right.</p>,
             <p>We can see Blue has 23 points.</p>,
         ];
@@ -447,16 +329,6 @@ class Page11 extends Module2 {
     }
     text(): JSX.Element | Array<JSX.Element> {
         return [
-            <button key="playButton" onClick={this.playAudio}>
-                Play Audio
-            </button>,
-            <audio
-                key="audioElement"
-                ref={this.audioRef}
-                style={{ visibility: "hidden" }}
-                autoPlay={true}
-                src={this.audioUrl}
-            ></audio>,
             <p>And White has 24, so White is ahead by one.</p>,
         ];
     }
@@ -484,16 +356,6 @@ class Page12 extends Module2 {
     }
     text(): JSX.Element | Array<JSX.Element> {
         return [
-            <button key="playButton" onClick={this.playAudio}>
-                Play Audio
-            </button>,
-            <audio
-                key="audioElement"
-                ref={this.audioRef}
-                style={{ visibility: "hidden" }}
-                autoPlay={true}
-                src={this.audioUrl}
-            ></audio>,
             <p>But Blue also captured three stones which went into the prisoner bowl.</p>,
             <p>Those three stones that Blue captured are subtracted from White's territory.</p>,
             <p>Now the score is Blue 23 and White 21 so Blue wins by two.</p>,
@@ -524,16 +386,6 @@ class Page13 extends Module2 {
     }
     text(): JSX.Element | Array<JSX.Element> {
         return [
-            <button key="playButton" onClick={this.playAudio}>
-                Play Audio
-            </button>,
-            <audio
-                key="audioElement"
-                ref={this.audioRef}
-                style={{ visibility: "hidden" }}
-                autoPlay={true}
-                src={this.audioUrl}
-            ></audio>,
             <p>
                 When we play face-to-face we put all captures back into the territory of the same
                 color. So at the end of the game, the board will have all the stones played during
@@ -558,16 +410,6 @@ class Page14 extends Module2 {
     text(): JSX.Element | Array<JSX.Element> {
         return [
             // Audio not matching, need to record "and then come back to read the rest of these lessons."
-            <button key="playButton" onClick={this.playAudio}>
-                Play Audio
-            </button>,
-            <audio
-                key="audioElement"
-                ref={this.audioRef}
-                style={{ visibility: "hidden" }}
-                autoPlay={true}
-                src={this.audioUrl}
-            ></audio>,
             <p>
                 You now know enough to play your first game of Go! There are actually two more
                 rules, but it can be confusing at first. Play a couple of games against the Easy
