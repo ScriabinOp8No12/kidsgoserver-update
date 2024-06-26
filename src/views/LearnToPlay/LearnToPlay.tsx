@@ -40,15 +40,40 @@ export function LearnToPlay(): JSX.Element {
                 <div className="back-background" />
                 <div className="background">
                     <ChapterButton chapter={1} />
-                    <div className="chapter-text chapter-1-text">Capturing Stones</div>
+                    <div
+                        className="chapter-text chapter-1-text"
+                        onClick={() => navigateToChapter(1, navigate)}
+                    >
+                        Capturing Stones
+                    </div>
                     <ChapterButton chapter={2} />
-                    <div className="chapter-text chapter-2-text">Quest for Space</div>
+                    <div
+                        className="chapter-text chapter-2-text"
+                        onClick={() => navigateToChapter(2, navigate)}
+                    >
+                        Quest for Space
+                    </div>
                     <ChapterButton chapter={3} />
-                    <div className="chapter-text chapter-3-text">Eyes for Life</div>
+                    <div
+                        className="chapter-text chapter-3-text"
+                        onClick={() => navigateToChapter(3, navigate)}
+                    >
+                        Eyes for Life
+                    </div>
                     <ChapterButton chapter={4} />
-                    <div className="chapter-text chapter-4-text">Ko Battles</div>
+                    <div
+                        className="chapter-text chapter-4-text"
+                        onClick={() => navigateToChapter(4, navigate)}
+                    >
+                        Ko Battles
+                    </div>
                     <ChapterButton chapter={5} />
-                    <div className="chapter-text chapter-5-text">Magic Moves</div>
+                    <div
+                        className="chapter-text chapter-5-text"
+                        onClick={() => navigateToChapter(5, navigate)}
+                    >
+                        Magic Moves
+                    </div>
                     <ChapterButton chapter={6} />
                     <div className="chapter-text chapter-6-text">Coming Soon</div>
                     <ChapterButton chapter={7} />
@@ -60,6 +85,12 @@ export function LearnToPlay(): JSX.Element {
             <div className="spacer" />
         </div>
     );
+}
+
+function navigateToChapter(chapter: number, navigate) {
+    if (chapter <= 5) {
+        navigate(`/learn-to-play/${chapter}`);
+    }
 }
 
 export function ChapterButton({ chapter }: { chapter: number }): JSX.Element {
