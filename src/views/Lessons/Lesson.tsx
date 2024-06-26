@@ -295,7 +295,7 @@ export function Lesson({ chapter, page }: { chapter: number; page: number }): JS
                     <div id="left-container">
                         <div className="explanation-text" onClick={cancel_animation_ref.current}>
                             <button onClick={toggleAudio}>
-                                {isPlayingAudio ? "Stop Audio" : "Play Audio"}
+                                {isPlayingAudio ? "Mute Audio" : "Play Audio"}
                             </button>
                             <audio ref={audioRef} style={{ display: "none" }} />
                             {text}

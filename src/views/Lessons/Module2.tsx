@@ -20,7 +20,6 @@ import { Content } from "./Content";
 import { PuzzleConfig, Goban, JGOFNumericPlayerColor } from "goban";
 
 class Module2 extends Content {
-
     constructor(audioUrl: string) {
         super();
         this.audioUrl = audioUrl;
@@ -35,7 +34,7 @@ class Page1 extends Module2 {
     }
     text(): JSX.Element | Array<JSX.Element> {
         return [
-            <span>
+            <span style={{ display: "block" }}>
                 Based on the last lesson you might think the goal of this game is to capture stones,
                 but actually whoever surrounds the most territory at the end of the game wins.
             </span>,
@@ -117,9 +116,7 @@ class Page4 extends Module2 {
         );
     }
     text(): JSX.Element | Array<JSX.Element> {
-        return [
-            <p>Four points is right.</p>,
-        ];
+        return [<p>Four points is right.</p>];
     }
     config(): PuzzleConfig {
         return {
@@ -145,9 +142,7 @@ class Page5 extends Module2 {
         );
     }
     text(): JSX.Element | Array<JSX.Element> {
-        return [
-            <p>How many points does Blue have here?</p>,
-        ];
+        return [<p>How many points does Blue have here?</p>];
     }
     config(): PuzzleConfig {
         return {
@@ -328,9 +323,7 @@ class Page11 extends Module2 {
         );
     }
     text(): JSX.Element | Array<JSX.Element> {
-        return [
-            <p>And White has 24, so White is ahead by one.</p>,
-        ];
+        return [<p>And White has 24, so White is ahead by one.</p>];
     }
     config(): PuzzleConfig {
         return {
