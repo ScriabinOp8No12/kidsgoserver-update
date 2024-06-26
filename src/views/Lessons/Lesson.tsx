@@ -102,9 +102,15 @@ export function Lesson({ chapter, page }: { chapter: number; page: number }): JS
 
     useEffect(() => {
         console.log("Constructing game ", chapter, page);
-        const content = new chapters[chapter][page]();
-        // const content = new chapters[chapter][page](audioRef);
+        const content = new chapters[chapter][page]() as any;
 
+        // Set up audio
+        if (audioRef.current) {
+            audioRef.current.src = content.audioUrl;
+            if (isPlayingAudio) {
+                audioRef.current.play();
+            }
+        }
         let ct = 0;
 
         const target_text: Array<JSX.Element> = (
@@ -269,23 +275,15 @@ export function Lesson({ chapter, page }: { chapter: number; page: number }): JS
         };
     }, [chapter, page, replay, isPlayingAudio]);
 
-    const toggleAudio = async () => {
-        const audio = audioRef?.current;
-
-        if (isPlayingAudio) {
-            // console.log("hit here 1.");
-            // if (audio) {
-            //     console.log("hit here 2.");
-            //     console.log("audioRef.current 22222", audioRef.current);
-            //     audio.pause();
-            //     audio.currentTime = 0;
-            // }
-            setIsPlayingAudio(false);
-        } else {
-            // if (audio) {
-            //     await audio.play();
-            // }
-            setIsPlayingAudio(true);
+    const toggleAudio = () => {
+        const audio = audioRef.current;
+        if (audio) {
+            if (isPlayingAudio) {
+                audio.pause();
+            } else {
+                audio.play();
+            }
+            setIsPlayingAudio(!isPlayingAudio);
         }
     };
 
@@ -303,17 +301,7 @@ export function Lesson({ chapter, page }: { chapter: number; page: number }): JS
                             <button onClick={toggleAudio}>
                                 {isPlayingAudio ? "Stop Audio" : "Play Audio"}
                             </button>
-                            {/* <audio
-                                key="audioElement"
-                                ref={audioRef}
-                                style={{ visibility: "hidden" }}
-                                autoPlay={true} // This line auto plays the audio when we click the next button to navigate to the next page
-                                // src={audioUrl}
-                            ></audio> */}
-                            {/* <audio
-                                ref={audioRef}
-                                style={{ visibility: "hidden" }}
-                            ></audio> */}
+                            <audio ref={audioRef} style={{ display: "none" }} />
                             {text}
                             {/* {text.map((e, idx) => (
                                 <div className="fade-in" key={idx}>
