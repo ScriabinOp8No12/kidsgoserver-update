@@ -24,35 +24,10 @@ import { openPopup } from "PopupDialog";
 const POPUP_TIMEOUT = 3000;
 
 class Module1 extends Content {
-    audioRef: React.RefObject<HTMLAudioElement>;
-    // audioRef: React.RefObject<HTMLAudioElement>;
-    audioUrl: string;
-
     constructor(audioUrl: string) {
         super();
         this.audioUrl = audioUrl;
     }
-
-    // playAudio = async () => {
-    //     const audio = this.audioRef.current;
-    //     if (audio) {
-    //         await audio.play();
-    //     }
-    // };
-
-    // componentWillUnmount() {
-    //     // Stop audio playback and cleanup when the component is about to unmount
-    //     const audio = this.audioRef.current;
-    //     if (audio) {
-    //         audio.pause();
-    //         audio.currentTime = 0;
-    //     }
-    //     // Clean up the delay of stone animations, otherwise it'll persist across rerenders and cause weird side effects
-    //     Object.keys(this.delays).forEach((key) => {
-    //         clearTimeout(this.delays[key]);
-    //         delete this.delays[key];
-    //     });
-    // }
 }
 
 class Page1 extends Module1 {
@@ -95,16 +70,6 @@ class Page2 extends Module1 {
 
     text(): JSX.Element | Array<JSX.Element> {
         return [
-            // <button key="playButton" onClick={this.playAudio}>
-            //     Play Audio
-            // </button>,
-            // <audio
-            //     key="audioElement"
-            //     ref={this.audioRef}
-            //     style={{ visibility: "hidden" }}
-            //     autoPlay={true}
-            //     src={this.audioUrl}
-            // ></audio>,
             <p>
                 The spaces next to the stones are important, we call them Liberties. This stone has
                 four liberties where the lines cross.
@@ -139,16 +104,6 @@ class Page3 extends Module1 {
 
     text(): JSX.Element | Array<JSX.Element> {
         return [
-            // <button key="playButton" onClick={this.playAudio}>
-            //     Play Audio
-            // </button>,
-            // <audio
-            //     key="audioElement"
-            //     ref={this.audioRef}
-            //     style={{ visibility: "hidden" }}
-            //     autoPlay={true}
-            //     src={this.audioUrl}
-            // ></audio>,
             <p>
                 There are no liberties off the edge of the board, so this stone only has two
                 liberties.
@@ -178,19 +133,7 @@ class Page4 extends Module1 {
     }
 
     text(): JSX.Element | Array<JSX.Element> {
-        return [
-            // <button key="playButton" onClick={this.playAudio}>
-            //     Play Audio
-            // </button>,
-            // <audio
-            //     key="audioElement"
-            //     ref={this.audioRef}
-            //     style={{ visibility: "hidden" }}
-            //     autoPlay={true}
-            //     src={this.audioUrl}
-            // ></audio>,
-            <p>And this stone only has three.</p>,
-        ];
+        return [<p>And this stone only has three.</p>];
     }
     config(): PuzzleConfig {
         return {
@@ -216,16 +159,6 @@ class Page5 extends Module1 {
     }
     text(): JSX.Element | Array<JSX.Element> {
         return [
-            // <button key="playButton" onClick={this.playAudio}>
-            //     Play Audio
-            // </button>,
-            // <audio
-            //     key="audioElement"
-            //     ref={this.audioRef}
-            //     style={{ visibility: "hidden" }}
-            //     autoPlay={true}
-            //     src={this.audioUrl}
-            // ></audio>,
             <p>
                 Stones of the same color that touch each other are on the same team. So they share
                 their liberties.
@@ -261,16 +194,6 @@ class Page6 extends Module1 {
     }
     text(): JSX.Element | Array<JSX.Element> {
         return [
-            // <button key="playButton" onClick={this.playAudio}>
-            //     Play Audio
-            // </button>,
-            // <audio
-            //     key="audioElement"
-            //     ref={this.audioRef}
-            //     style={{ visibility: "hidden" }}
-            //     autoPlay={true}
-            //     src={this.audioUrl}
-            // ></audio>,
             <p>
                 If the other player takes 3 out of 4 liberties, we say a stone is in Atari, which
                 means it can be captured on the next turn.
@@ -302,16 +225,6 @@ class Page7 extends Module1 {
     }
     text(): JSX.Element | Array<JSX.Element> {
         return [
-            // <button key="playButton" onClick={this.playAudio}>
-            //     Play Audio
-            // </button>,
-            // <audio
-            //     key="audioElement"
-            //     ref={this.audioRef}
-            //     style={{ visibility: "hidden" }}
-            //     autoPlay={true}
-            //     src={this.audioUrl}
-            // ></audio>,
             <p>If we add a stone, then they form a team and get new liberties.</p>,
             <p>Now they have three liberties and are safe from immediate capture.</p>,
         ];
@@ -341,16 +254,6 @@ class Page8 extends Module1 {
     }
     text(): JSX.Element | Array<JSX.Element> {
         return [
-            // <button key="playButton" onClick={this.playAudio}>
-            //     Play Audio
-            // </button>,
-            // <audio
-            //     key="audioElement"
-            //     ref={this.audioRef}
-            //     style={{ visibility: "hidden" }}
-            //     autoPlay={true}
-            //     src={this.audioUrl}
-            // ></audio>,
             <p>
                 If Blue goes somewhere else though, then White can capture the stone and remove it
                 from the board.
@@ -388,19 +291,7 @@ class Puzzle1 extends Module1 {
     }
 
     text(): JSX.Element | Array<JSX.Element> {
-        return [
-            // <button key="playButton" onClick={this.playAudio}>
-            //     Play Audio
-            // </button>,
-            // <audio
-            //     key="audioElement"
-            //     ref={this.audioRef}
-            //     style={{ visibility: "hidden" }}
-            //     autoPlay={true}
-            //     src={this.audioUrl}
-            // ></audio>,
-            <p>Lets try some simple problems now. Try and capture the White stone.</p>,
-        ];
+        return [<p>Lets try some simple problems now. Try and capture the White stone.</p>];
     }
     config(): PuzzleConfig {
         return {
@@ -445,19 +336,7 @@ class Puzzle2 extends Module1 {
         );
     }
     text(): JSX.Element | Array<JSX.Element> {
-        return [
-            // <button key="playButton" onClick={this.playAudio}>
-            //     Play Audio
-            // </button>,
-            // <audio
-            //     key="audioElement"
-            //     ref={this.audioRef}
-            //     style={{ visibility: "hidden" }}
-            //     autoPlay={true}
-            //     src={this.audioUrl}
-            // ></audio>,
-            <p>Try and capture the White stone.</p>,
-        ];
+        return [<p>Try and capture the White stone.</p>];
     }
     config(): PuzzleConfig {
         return {
@@ -500,19 +379,7 @@ class Puzzle3 extends Module1 {
         );
     }
     text(): JSX.Element | Array<JSX.Element> {
-        return [
-            // <button key="playButton" onClick={this.playAudio}>
-            //     Play Audio
-            // </button>,
-            // <audio
-            //     key="audioElement"
-            //     ref={this.audioRef}
-            //     style={{ visibility: "hidden" }}
-            //     autoPlay={true}
-            //     src={this.audioUrl}
-            // ></audio>,
-            <p>Try and capture the White stones.</p>,
-        ];
+        return [<p>Try and capture the White stones.</p>];
     }
     config(): PuzzleConfig {
         return {
@@ -556,19 +423,7 @@ class Puzzle4 extends Module1 {
         );
     }
     text(): JSX.Element | Array<JSX.Element> {
-        return [
-            // <button key="playButton" onClick={this.playAudio}>
-            //     Play Audio
-            // </button>,
-            // <audio
-            //     key="audioElement"
-            //     ref={this.audioRef}
-            //     style={{ visibility: "hidden" }}
-            //     autoPlay={true}
-            //     src={this.audioUrl}
-            // ></audio>,
-            <p>Try and capture these White stones.</p>,
-        ];
+        return [<p>Try and capture these White stones.</p>];
     }
     config(): PuzzleConfig {
         return {
