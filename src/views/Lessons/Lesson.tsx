@@ -77,7 +77,7 @@ export function Lesson({ chapter, page }: { chapter: number; page: number }): JS
     const [showAxotol, setShowAxotol]: [boolean, (x: boolean) => void] = useState<boolean>(false);
     const [hidePlayButton, setHidePlayButton]: [boolean, (x: boolean) => void] =
         useState<boolean>(false);
-    const [isPlayingAudio, setIsPlayingAudio] = useState(false);
+    const [shouldPlayAudio, setShouldPlayAudio] = useState(true);
     const onResize = useCallback((width, height) => {
         const goban = goban_ref.current;
         if (goban) {
@@ -102,11 +102,11 @@ export function Lesson({ chapter, page }: { chapter: number; page: number }): JS
 
     useEffect(() => {
         console.log("Constructing game ", chapter, page);
-        const content = new chapters[chapter][page](isPlayingAudio);
+        const content = new chapters[chapter][page](shouldPlayAudio);
 
         if (audioRef.current) {
             audioRef.current.src = content.audioUrl;
-            if (isPlayingAudio) {
+            if (shouldPlayAudio) {
                 audioRef.current.play();
             }
         }
@@ -271,17 +271,17 @@ export function Lesson({ chapter, page }: { chapter: number; page: number }): JS
                 audioRef.current.currentTime = 0;
             }
         };
-    }, [chapter, page, replay, isPlayingAudio]);
+    }, [chapter, page, replay]);
 
     const toggleAudio = () => {
         const audio = audioRef.current;
         if (audio) {
-            if (isPlayingAudio) {
+            if (shouldPlayAudio) {
                 audio.pause();
             } else {
                 audio.play();
             }
-            setIsPlayingAudio(!isPlayingAudio);
+            setShouldPlayAudio(!shouldPlayAudio);
         }
     };
 
@@ -295,7 +295,7 @@ export function Lesson({ chapter, page }: { chapter: number; page: number }): JS
                     <div id="left-container">
                         <div className="explanation-text" onClick={cancel_animation_ref.current}>
                             <button onClick={toggleAudio}>
-                                {isPlayingAudio ? "Mute Audio" : "Play Audio"}
+                                {shouldPlayAudio ? "Mute Audio" : "Play Audio"}
                             </button>
                             <audio ref={audioRef} style={{ display: "none" }} />
                             {text}

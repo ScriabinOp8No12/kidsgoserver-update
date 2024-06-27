@@ -24,18 +24,18 @@ import { openPopup } from "PopupDialog";
 const POPUP_TIMEOUT = 3000;
 
 class Module1 extends Content {
-    constructor(audioUrl: string, isPlayingAudio: boolean) {
+    constructor(audioUrl: string, shouldPlayAudio: boolean) {
         super();
         this.audioUrl = audioUrl;
-        this.isPlayingAudio = isPlayingAudio;
+        this.shouldPlayAudio = shouldPlayAudio;
     }
 }
 
 class Page1 extends Module1 {
-    constructor(isPlayingAudio: boolean) {
+    constructor(shouldPlayAudio: boolean) {
         super(
             "https://res.cloudinary.com/dn8rdavoi/video/upload/v1708472624/audio-slice-less-pauses-COMBINED/slice1_and_2_combined_wxolf5.mp3",
-            isPlayingAudio,
+            shouldPlayAudio,
         );
     }
 
@@ -64,10 +64,10 @@ class Page1 extends Module1 {
 }
 
 class Page2 extends Module1 {
-    constructor(isPlayingAudio: boolean) {
+    constructor(shouldPlayAudio: boolean) {
         super(
             "https://res.cloudinary.com/dn8rdavoi/video/upload/v1708472317/audio-slices-less-pauses/slice3_less_pauses_c9w9eo.mp3",
-            isPlayingAudio,
+            shouldPlayAudio,
         );
     }
 
@@ -99,10 +99,10 @@ class Page2 extends Module1 {
 }
 
 class Page3 extends Module1 {
-    constructor(isPlayingAudio: boolean) {
+    constructor(shouldPlayAudio: boolean) {
         super(
             "https://res.cloudinary.com/dn8rdavoi/video/upload/v1708472317/audio-slices-less-pauses/slice4_less_pauses_jiozem.mp3",
-            isPlayingAudio,
+            shouldPlayAudio,
         );
     }
 
@@ -130,10 +130,10 @@ class Page3 extends Module1 {
 }
 
 class Page4 extends Module1 {
-    constructor(isPlayingAudio: boolean) {
+    constructor(shouldPlayAudio: boolean) {
         super(
             "https://res.cloudinary.com/dn8rdavoi/video/upload/v1708472318/audio-slices-less-pauses/slice5_less_pauses_pebkdl.mp3",
-            isPlayingAudio,
+            shouldPlayAudio,
         );
     }
 
@@ -157,10 +157,10 @@ class Page4 extends Module1 {
 }
 
 class Page5 extends Module1 {
-    constructor(isPlayingAudio: boolean) {
+    constructor(shouldPlayAudio: boolean) {
         super(
             "https://res.cloudinary.com/dn8rdavoi/video/upload/v1708473054/audio-slices-less-pauses/slice6_less_pauses_revised_zbk8aa.mp3",
-            isPlayingAudio,
+            shouldPlayAudio,
         );
     }
     text(): JSX.Element | Array<JSX.Element> {
@@ -193,10 +193,10 @@ class Page5 extends Module1 {
 }
 
 class Page6 extends Module1 {
-    constructor(isPlayingAudio: boolean) {
+    constructor(shouldPlayAudio: boolean) {
         super(
             "https://res.cloudinary.com/dn8rdavoi/video/upload/v1708472320/audio-slices-less-pauses/slice7_less_pauses_nmppvy.mp3",
-            isPlayingAudio,
+            shouldPlayAudio,
         );
     }
     text(): JSX.Element | Array<JSX.Element> {
@@ -225,10 +225,10 @@ class Page6 extends Module1 {
 }
 
 class Page7 extends Module1 {
-    constructor(isPlayingAudio: boolean) {
+    constructor(shouldPlayAudio: boolean) {
         super(
             "https://res.cloudinary.com/dn8rdavoi/video/upload/v1708473412/audio-slice-less-pauses-COMBINED/slice8_and_9_combined_revised_fxjbn9.mp3",
-            isPlayingAudio,
+            shouldPlayAudio,
         );
     }
     text(): JSX.Element | Array<JSX.Element> {
@@ -255,10 +255,10 @@ class Page7 extends Module1 {
 }
 
 class Page8 extends Module1 {
-    constructor(isPlayingAudio: boolean) {
+    constructor(shouldPlayAudio: boolean) {
         super(
             "https://res.cloudinary.com/dn8rdavoi/video/upload/v1708472323/audio-slices-less-pauses/slice10_less_pauses_o5h9dp.mp3",
-            isPlayingAudio,
+            shouldPlayAudio,
         );
     }
     text(): JSX.Element | Array<JSX.Element> {
@@ -288,10 +288,10 @@ class Page8 extends Module1 {
 class Puzzle1 extends Module1 {
     private successAudio: HTMLAudioElement;
 
-    constructor(isPlayingAudio: boolean) {
+    constructor(shouldPlayAudio: boolean) {
         super(
             "https://res.cloudinary.com/dn8rdavoi/video/upload/v1708547807/audio-slice-less-pauses-COMBINED/slice11_and_12_combined_dzwlo9.mp3",
-            isPlayingAudio,
+            shouldPlayAudio,
         );
         // Success audio for the popup audio!  Says "Good job!"
         this.successAudio = new Audio(
@@ -315,7 +315,7 @@ class Puzzle1 extends Module1 {
         goban.on("update", () => {
             if (goban.engine.board[0][3] === 0) {
                 // If we chain the success audio after the captureDelay, the "good job audio clip" happens after we go to the next puzzle
-                if (this.isPlayingAudio) {
+                if (this.shouldPlayAudio) {
                     this.successAudio
                         .play()
                         .catch((error) => console.error("Error playing success audio:", error));
@@ -339,10 +339,10 @@ class Puzzle1 extends Module1 {
 class Puzzle2 extends Module1 {
     private successAudio: HTMLAudioElement;
 
-    constructor(isPlayingAudio: boolean) {
+    constructor(shouldPlayAudio: boolean) {
         super(
             "https://res.cloudinary.com/dn8rdavoi/video/upload/v1708472327/audio-slices-less-pauses/slice14_less_pauses_if00pt.mp3",
-            isPlayingAudio,
+            shouldPlayAudio,
         );
         this.successAudio = new Audio(
             "https://res.cloudinary.com/dn8rdavoi/video/upload/v1708472328/audio-slices-less-pauses/slice15_less_pauses_w7g2jr.mp3",
@@ -362,7 +362,7 @@ class Puzzle2 extends Module1 {
     onSetGoban(goban: Goban): void {
         goban.on("update", () => {
             if (goban.engine.board[3][4] === 0) {
-                if (this.isPlayingAudio) {
+                if (this.shouldPlayAudio) {
                     this.successAudio
                         .play()
                         .catch((error) => console.error("Error playing success audio:", error));
@@ -385,10 +385,10 @@ class Puzzle2 extends Module1 {
 
 class Puzzle3 extends Module1 {
     private successAudio: HTMLAudioElement;
-    constructor(isPlayingAudio: boolean) {
+    constructor(shouldPlayAudio: boolean) {
         super(
             "https://res.cloudinary.com/dn8rdavoi/video/upload/v1708472329/audio-slices-less-pauses/slice16_less_pauses_muc2vl.mp3",
-            isPlayingAudio,
+            shouldPlayAudio,
         );
         this.successAudio = new Audio(
             "https://res.cloudinary.com/dn8rdavoi/video/upload/v1708472331/audio-slices-less-pauses/slice17_less_pauses_znln8h.mp3",
@@ -409,7 +409,7 @@ class Puzzle3 extends Module1 {
     onSetGoban(goban: Goban): void {
         goban.on("update", () => {
             if (goban.engine.board[3][4] === 0) {
-                if (this.isPlayingAudio) {
+                if (this.shouldPlayAudio) {
                     this.successAudio
                         .play()
                         .catch((error) => console.error("Error playing success audio:", error));
@@ -432,10 +432,10 @@ class Puzzle3 extends Module1 {
 
 class Puzzle4 extends Module1 {
     private successAudio: HTMLAudioElement;
-    constructor(isPlayingAudio: boolean) {
+    constructor(shouldPlayAudio: boolean) {
         super(
             "https://res.cloudinary.com/dn8rdavoi/video/upload/v1708548582/audio-slices-less-pauses/slice18_less_pauses_revised_y2583y.mp3",
-            isPlayingAudio,
+            shouldPlayAudio,
         );
         this.successAudio = new Audio(
             "https://res.cloudinary.com/dn8rdavoi/video/upload/v1708548659/audio-slices-less-pauses/slice19_less_pauses_revised_fykpjy.mp3",
@@ -456,7 +456,7 @@ class Puzzle4 extends Module1 {
     onSetGoban(goban: Goban): void {
         goban.on("update", () => {
             if (goban.engine.board[3][4] === 0) {
-                if (this.isPlayingAudio) {
+                if (this.shouldPlayAudio) {
                     this.successAudio
                         .play()
                         .catch((error) => console.error("Error playing success audio:", error));
