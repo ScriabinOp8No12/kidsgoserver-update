@@ -91,7 +91,7 @@ class Page3 extends Module5 {
         );
     }
     text(): JSX.Element | Array<JSX.Element> {
-        return [<p>Blue could add a stone at 2 to make a group with three liberties</p>];
+        return [<p>Blue could add a stone at 2 to make a group with three liberties.</p>];
     }
     config(): PuzzleConfig {
         return {

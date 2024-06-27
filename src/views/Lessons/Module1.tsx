@@ -24,18 +24,20 @@ import { openPopup } from "PopupDialog";
 const POPUP_TIMEOUT = 3000;
 
 class Module1 extends Content {
-    constructor(audioUrl: string, shouldPlayAudio: boolean) {
+    constructor(audioUrl: string, shouldPlayAudio?: boolean) {
         super();
         this.audioUrl = audioUrl;
-        this.shouldPlayAudio = shouldPlayAudio;
+        // Make shouldPlayAudio optional, as only the puzzles need it for conditionally checking if we should render the audio when a user answers the puzzle right
+        if (shouldPlayAudio !== undefined) {
+            this.shouldPlayAudio = shouldPlayAudio;
+        }
     }
 }
 
 class Page1 extends Module1 {
-    constructor(shouldPlayAudio: boolean) {
+    constructor() {
         super(
             "https://res.cloudinary.com/dn8rdavoi/video/upload/v1708472624/audio-slice-less-pauses-COMBINED/slice1_and_2_combined_wxolf5.mp3",
-            shouldPlayAudio,
         );
     }
 
@@ -64,10 +66,9 @@ class Page1 extends Module1 {
 }
 
 class Page2 extends Module1 {
-    constructor(shouldPlayAudio: boolean) {
+    constructor() {
         super(
             "https://res.cloudinary.com/dn8rdavoi/video/upload/v1708472317/audio-slices-less-pauses/slice3_less_pauses_c9w9eo.mp3",
-            shouldPlayAudio,
         );
     }
 
@@ -99,10 +100,9 @@ class Page2 extends Module1 {
 }
 
 class Page3 extends Module1 {
-    constructor(shouldPlayAudio: boolean) {
+    constructor() {
         super(
             "https://res.cloudinary.com/dn8rdavoi/video/upload/v1708472317/audio-slices-less-pauses/slice4_less_pauses_jiozem.mp3",
-            shouldPlayAudio,
         );
     }
 
@@ -130,10 +130,9 @@ class Page3 extends Module1 {
 }
 
 class Page4 extends Module1 {
-    constructor(shouldPlayAudio: boolean) {
+    constructor() {
         super(
             "https://res.cloudinary.com/dn8rdavoi/video/upload/v1708472318/audio-slices-less-pauses/slice5_less_pauses_pebkdl.mp3",
-            shouldPlayAudio,
         );
     }
 
@@ -157,10 +156,9 @@ class Page4 extends Module1 {
 }
 
 class Page5 extends Module1 {
-    constructor(shouldPlayAudio: boolean) {
+    constructor() {
         super(
             "https://res.cloudinary.com/dn8rdavoi/video/upload/v1708473054/audio-slices-less-pauses/slice6_less_pauses_revised_zbk8aa.mp3",
-            shouldPlayAudio,
         );
     }
     text(): JSX.Element | Array<JSX.Element> {
@@ -193,10 +191,9 @@ class Page5 extends Module1 {
 }
 
 class Page6 extends Module1 {
-    constructor(shouldPlayAudio: boolean) {
+    constructor() {
         super(
             "https://res.cloudinary.com/dn8rdavoi/video/upload/v1708472320/audio-slices-less-pauses/slice7_less_pauses_nmppvy.mp3",
-            shouldPlayAudio,
         );
     }
     text(): JSX.Element | Array<JSX.Element> {
@@ -225,10 +222,9 @@ class Page6 extends Module1 {
 }
 
 class Page7 extends Module1 {
-    constructor(shouldPlayAudio: boolean) {
+    constructor() {
         super(
             "https://res.cloudinary.com/dn8rdavoi/video/upload/v1708473412/audio-slice-less-pauses-COMBINED/slice8_and_9_combined_revised_fxjbn9.mp3",
-            shouldPlayAudio,
         );
     }
     text(): JSX.Element | Array<JSX.Element> {
@@ -255,10 +251,9 @@ class Page7 extends Module1 {
 }
 
 class Page8 extends Module1 {
-    constructor(shouldPlayAudio: boolean) {
+    constructor() {
         super(
             "https://res.cloudinary.com/dn8rdavoi/video/upload/v1708472323/audio-slices-less-pauses/slice10_less_pauses_o5h9dp.mp3",
-            shouldPlayAudio,
         );
     }
     text(): JSX.Element | Array<JSX.Element> {

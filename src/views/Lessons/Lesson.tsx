@@ -77,7 +77,7 @@ export function Lesson({ chapter, page }: { chapter: number; page: number }): JS
     const [showAxotol, setShowAxotol]: [boolean, (x: boolean) => void] = useState<boolean>(false);
     const [hidePlayButton, setHidePlayButton]: [boolean, (x: boolean) => void] =
         useState<boolean>(false);
-    const [shouldPlayAudio, setShouldPlayAudio] = useState(true);
+    const [shouldPlayAudio, setShouldPlayAudio] = useState(true); // State for tracking audio on learn-to-play pages where it has audio matching the text, set to true initially, but can dynamically set it off localstorage if needed
     const onResize = useCallback((width, height) => {
         const goban = goban_ref.current;
         if (goban) {
@@ -104,6 +104,7 @@ export function Lesson({ chapter, page }: { chapter: number; page: number }): JS
         console.log("Constructing game ", chapter, page);
         const content = new chapters[chapter][page](shouldPlayAudio);
 
+        // Playing audio that matches text on learn-to-play pages
         if (audioRef.current) {
             audioRef.current.src = content.audioUrl;
             if (shouldPlayAudio) {
