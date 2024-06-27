@@ -67,6 +67,7 @@ export function Lesson({ chapter, page }: { chapter: number; page: number }): JS
     const [container, _setContainer] = useState(document.createElement("div"));
     const goban_ref = useRef<Goban>(null);
     const cancel_animation_ref = useRef<() => void>(() => {});
+    const audioRef = useRef<HTMLAudioElement>(null);
     const goban_opts_ref = useRef<any>({});
     const [text, setText]: [Array<JSX.Element>, (x: Array<JSX.Element>) => void] = useState<
         Array<JSX.Element>
@@ -76,6 +77,7 @@ export function Lesson({ chapter, page }: { chapter: number; page: number }): JS
     const [showAxotol, setShowAxotol]: [boolean, (x: boolean) => void] = useState<boolean>(false);
     const [hidePlayButton, setHidePlayButton]: [boolean, (x: boolean) => void] =
         useState<boolean>(false);
+    const [shouldPlayAudio, setShouldPlayAudio] = useState(true); // State for tracking audio on learn-to-play pages where it has audio matching the text, set to true initially, but can dynamically set it off localstorage if needed
     const onResize = useCallback((width, height) => {
         const goban = goban_ref.current;
         if (goban) {
@@ -100,8 +102,15 @@ export function Lesson({ chapter, page }: { chapter: number; page: number }): JS
 
     useEffect(() => {
         console.log("Constructing game ", chapter, page);
-        const content = new chapters[chapter][page]();
+        const content = new chapters[chapter][page](shouldPlayAudio);
 
+        // Playing audio that matches text on learn-to-play pages
+        if (audioRef.current) {
+            audioRef.current.src = content.audioUrl;
+            if (shouldPlayAudio) {
+                audioRef.current.play();
+            }
+        }
         let ct = 0;
 
         const target_text: Array<JSX.Element> = (
@@ -111,7 +120,7 @@ export function Lesson({ chapter, page }: { chapter: number; page: number }): JS
         const animation = content.animate(() => {
             setText(target_text.slice(0, ct++));
             return target_text.length >= ct;
-        }, 0); // Remove 500ms animation and replace with 0ms animation for text field in left panel since we have the audio now
+        }, 0); // Not working anymore (6/26/2024) -> Used to allow the value to animate the text showing up in the left panel, look in the return portion for original working code
         cancel_animation_ref.current = () => {
             animation.cancel();
             setText(target_text);
@@ -258,8 +267,24 @@ export function Lesson({ chapter, page }: { chapter: number; page: number }): JS
             goban_opts_ref.current = null;
             clearTimeout(animation_interval);
             hup(Math.random());
+            if (audioRef.current) {
+                audioRef.current.pause();
+                audioRef.current.currentTime = 0;
+            }
         };
     }, [chapter, page, replay]);
+
+    const toggleAudio = () => {
+        const audio = audioRef.current;
+        if (audio) {
+            if (shouldPlayAudio) {
+                audio.pause();
+            } else {
+                audio.play();
+            }
+            setShouldPlayAudio(!shouldPlayAudio);
+        }
+    };
 
     return (
         <>
@@ -270,11 +295,17 @@ export function Lesson({ chapter, page }: { chapter: number; page: number }): JS
                 <div id="Lesson-bottom-container">
                     <div id="left-container">
                         <div className="explanation-text" onClick={cancel_animation_ref.current}>
-                            {text.map((e, idx) => (
+                            <button onClick={toggleAudio}>
+                                {shouldPlayAudio ? "Mute Audio" : "Play Audio"}
+                            </button>
+                            <audio ref={audioRef} style={{ display: "none" }} />
+                            {text}
+                            {/* Text animation logic below */}
+                            {/* {text.map((e, idx) => (
                                 <div className="fade-in" key={idx}>
                                     {e}
                                 </div>
-                            ))}
+                            ))} */}
                         </div>
                         <div className="bottom-graphic" />
                     </div>

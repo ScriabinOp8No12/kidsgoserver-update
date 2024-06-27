@@ -21,28 +21,9 @@ import { PuzzleConfig, Goban, JGOFNumericPlayerColor } from "goban";
 import { openPopup } from "PopupDialog";
 
 class Module5 extends Content {
-    audioRef: React.RefObject<HTMLAudioElement>;
-    audioUrl: string;
-
     constructor(audioUrl: string) {
         super();
-        this.audioRef = React.createRef();
         this.audioUrl = audioUrl;
-    }
-
-    playAudio = async () => {
-        const audio = this.audioRef.current;
-        if (audio) {
-            await audio.play();
-        }
-    };
-
-    componentWillUnmount() {
-        const audio = this.audioRef.current;
-        if (audio) {
-            audio.pause();
-            audio.currentTime = 0;
-        }
     }
 }
 
@@ -54,16 +35,6 @@ class Page1 extends Module5 {
     }
     text(): JSX.Element | Array<JSX.Element> {
         return [
-            <button key="playButton" onClick={this.playAudio}>
-                Play Audio
-            </button>,
-            <audio
-                key="audioElement"
-                ref={this.audioRef}
-                style={{ visibility: "hidden" }}
-                autoPlay={true}
-                src={this.audioUrl}
-            ></audio>,
             <p>Here's an example of how some things might play out in a real game.</p>,
             <p>
                 Let's look at these two stones. They're not a team, because diagonal points are not
@@ -91,16 +62,6 @@ class Page2 extends Module5 {
     }
     text(): JSX.Element | Array<JSX.Element> {
         return [
-            <button key="playButton" onClick={this.playAudio}>
-                Play Audio
-            </button>,
-            <audio
-                key="audioElement"
-                ref={this.audioRef}
-                style={{ visibility: "hidden" }}
-                autoPlay={true}
-                src={this.audioUrl}
-            ></audio>,
             <p>
                 With enough moves, both stones could be captured. The white stone at 1 places both
                 Blue stones into atari at once, or double atari.
@@ -130,19 +91,7 @@ class Page3 extends Module5 {
         );
     }
     text(): JSX.Element | Array<JSX.Element> {
-        return [
-            <button key="playButton" onClick={this.playAudio}>
-                Play Audio
-            </button>,
-            <audio
-                key="audioElement"
-                ref={this.audioRef}
-                style={{ visibility: "hidden" }}
-                autoPlay={true}
-                src={this.audioUrl}
-            ></audio>,
-            <p>Blue could add a stone at 2 to make a group with three liberties</p>,
-        ];
+        return [<p>Blue could add a stone at 2 to make a group with three liberties.</p>];
     }
     config(): PuzzleConfig {
         return {
@@ -176,16 +125,6 @@ class Page4 extends Module5 {
     }
     text(): JSX.Element | Array<JSX.Element> {
         return [
-            <button key="playButton" onClick={this.playAudio}>
-                Play Audio
-            </button>,
-            <audio
-                key="audioElement"
-                ref={this.audioRef}
-                style={{ visibility: "hidden" }}
-                autoPlay={true}
-                src={this.audioUrl}
-            ></audio>,
             <p>
                 White can still capture the other stone at 3 though, because it's not connected to
                 the Blue group.
@@ -218,16 +157,6 @@ class Page5 extends Module5 {
     }
     text(): JSX.Element | Array<JSX.Element> {
         return [
-            <button key="playButton" onClick={this.playAudio}>
-                Play Audio
-            </button>,
-            <audio
-                key="audioElement"
-                ref={this.audioRef}
-                style={{ visibility: "hidden" }}
-                autoPlay={true}
-                src={this.audioUrl}
-            ></audio>,
             <p>
                 So White might try to capture the Blue group by adding a stone at 1. Blue might try
                 playing at 2 to save the stones.
@@ -259,16 +188,6 @@ class Page6 extends Module5 {
     }
     text(): JSX.Element | Array<JSX.Element> {
         return [
-            <button key="playButton" onClick={this.playAudio}>
-                Play Audio
-            </button>,
-            <audio
-                key="audioElement"
-                ref={this.audioRef}
-                style={{ visibility: "hidden" }}
-                autoPlay={true}
-                src={this.audioUrl}
-            ></audio>,
             <p>
                 Maybe White gets impatient and tries to surround Blue's group with 3. Blue responds
                 with 4, which puts White's stone at A into atari.
@@ -310,16 +229,6 @@ class Page7 extends Module5 {
     }
     text(): JSX.Element | Array<JSX.Element> {
         return [
-            <button key="playButton" onClick={this.playAudio}>
-                Play Audio
-            </button>,
-            <audio
-                key="audioElement"
-                ref={this.audioRef}
-                style={{ visibility: "hidden" }}
-                autoPlay={true}
-                src={this.audioUrl}
-            ></audio>,
             <p>
                 White will lose the stone at A if Blue plays at B, so White adds a stone there to
                 get new liberties.
@@ -351,16 +260,6 @@ class Page8 extends Module5 {
     }
     text(): JSX.Element | Array<JSX.Element> {
         return [
-            <button key="playButton" onClick={this.playAudio}>
-                Play Audio
-            </button>,
-            <audio
-                key="audioElement"
-                ref={this.audioRef}
-                style={{ visibility: "hidden" }}
-                autoPlay={true}
-                src={this.audioUrl}
-            ></audio>,
             <p>Now Blue has turned the tables on white! Playing at 1 puts white C into atari.</p>,
         ];
     }
@@ -389,16 +288,6 @@ class Page9 extends Module5 {
     }
     text(): JSX.Element | Array<JSX.Element> {
         return [
-            <button key="playButton" onClick={this.playAudio}>
-                Play Audio
-            </button>,
-            <audio
-                key="audioElement"
-                ref={this.audioRef}
-                style={{ visibility: "hidden" }}
-                autoPlay={true}
-                src={this.audioUrl}
-            ></audio>,
             <p>
                 White adds a stone at 2, but there's a problem. 2 is on the edge of the board, which
                 means there is one liberty less!
@@ -430,16 +319,6 @@ class Page10 extends Module5 {
     }
     text(): JSX.Element | Array<JSX.Element> {
         return [
-            <button key="playButton" onClick={this.playAudio}>
-                Play Audio
-            </button>,
-            <audio
-                key="audioElement"
-                ref={this.audioRef}
-                style={{ visibility: "hidden" }}
-                autoPlay={true}
-                src={this.audioUrl}
-            ></audio>,
             <p>
                 This means that a move by Blue at either A or B will put two white stones into
                 atari. Which one do you think is best?
@@ -471,16 +350,6 @@ class Page11 extends Module5 {
     }
     text(): JSX.Element | Array<JSX.Element> {
         return [
-            <button key="playButton" onClick={this.playAudio}>
-                Play Audio
-            </button>,
-            <audio
-                key="audioElement"
-                ref={this.audioRef}
-                style={{ visibility: "hidden" }}
-                autoPlay={true}
-                src={this.audioUrl}
-            ></audio>,
             <p>
                 Let's look at B first. This move looks good because on the next turn Blue could
                 capture the two white stones at A.
@@ -511,16 +380,6 @@ class Page12 extends Module5 {
     }
     text(): JSX.Element | Array<JSX.Element> {
         return [
-            <button key="playButton" onClick={this.playAudio}>
-                Play Audio
-            </button>,
-            <audio
-                key="audioElement"
-                ref={this.audioRef}
-                style={{ visibility: "hidden" }}
-                autoPlay={true}
-                src={this.audioUrl}
-            ></audio>,
             <p>
                 Unfortunately, it's not Blue's turn. While it is true that white is in atari, Blue
                 is also now in atari, so white can capture first - at C - and remove four Blue
@@ -560,16 +419,6 @@ class Page13 extends Module5 {
     }
     text(): JSX.Element | Array<JSX.Element> {
         return [
-            <button key="playButton" onClick={this.playAudio}>
-                Play Audio
-            </button>,
-            <audio
-                key="audioElement"
-                ref={this.audioRef}
-                style={{ visibility: "hidden" }}
-                autoPlay={true}
-                src={this.audioUrl}
-            ></audio>,
             <p>
                 Let's try going the other way this time. A Blue play at A also puts the two white
                 stones into atari.
@@ -599,19 +448,7 @@ class Page14 extends Module5 {
         );
     }
     text(): JSX.Element | Array<JSX.Element> {
-        return [
-            <button key="playButton" onClick={this.playAudio}>
-                Play Audio
-            </button>,
-            <audio
-                key="audioElement"
-                ref={this.audioRef}
-                style={{ visibility: "hidden" }}
-                autoPlay={true}
-                src={this.audioUrl}
-            ></audio>,
-            <p>Now even if white adds a stone at 2, which puts Blue into atari at D...</p>,
-        ];
+        return [<p>Now even if white adds a stone at 2, which puts Blue into atari at D...</p>];
     }
     config(): PuzzleConfig {
         return {
@@ -638,19 +475,7 @@ class Page15 extends Module5 {
         );
     }
     text(): JSX.Element | Array<JSX.Element> {
-        return [
-            <button key="playButton" onClick={this.playAudio}>
-                Play Audio
-            </button>,
-            <audio
-                key="audioElement"
-                ref={this.audioRef}
-                style={{ visibility: "hidden" }}
-                autoPlay={true}
-                src={this.audioUrl}
-            ></audio>,
-            <p>It's now Blue's turn, and playing at D captures all three white stones.</p>,
-        ];
+        return [<p>It's now Blue's turn, and playing at D captures all three white stones.</p>];
     }
     config(): PuzzleConfig {
         return {
@@ -681,16 +506,6 @@ class Page16 extends Module5 {
     }
     text(): JSX.Element | Array<JSX.Element> {
         return [
-            <button key="playButton" onClick={this.playAudio}>
-                Play Audio
-            </button>,
-            <audio
-                key="audioElement"
-                ref={this.audioRef}
-                style={{ visibility: "hidden" }}
-                autoPlay={true}
-                src={this.audioUrl}
-            ></audio>,
             <p>
                 In Go, the placement of a single stone can make the difference between capturing a
                 large group or losing one of your own. That's part of the fun!

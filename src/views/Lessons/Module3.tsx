@@ -22,28 +22,9 @@ import { openPopup } from "PopupDialog";
 import { Axol } from "./Axol";
 
 class Module3 extends Content {
-    audioRef: React.RefObject<HTMLAudioElement>;
-    audioUrl: string;
-
     constructor(audioUrl: string) {
         super();
-        this.audioRef = React.createRef();
         this.audioUrl = audioUrl;
-    }
-
-    playAudio = async () => {
-        const audio = this.audioRef.current;
-        if (audio) {
-            await audio.play();
-        }
-    };
-
-    componentWillUnmount() {
-        const audio = this.audioRef.current;
-        if (audio) {
-            audio.pause();
-            audio.currentTime = 0;
-        }
     }
 }
 
@@ -56,16 +37,6 @@ class Page1 extends Module3 {
 
     text(): JSX.Element | Array<JSX.Element> {
         return [
-            <button key="playButton" onClick={this.playAudio}>
-                Play Audio
-            </button>,
-            <audio
-                key="audioElement"
-                ref={this.audioRef}
-                style={{ visibility: "hidden" }}
-                autoPlay={true}
-                src={this.audioUrl}
-            ></audio>,
             <p>
                 One of the few rules in Go is that any stone played must have at least one liberty
                 after it's played.
@@ -99,16 +70,6 @@ class Page2 extends Module3 {
 
     text(): JSX.Element | Array<JSX.Element> {
         return [
-            <button key="playButton" onClick={this.playAudio}>
-                Play Audio
-            </button>,
-            <audio
-                key="audioElement"
-                ref={this.audioRef}
-                style={{ visibility: "hidden" }}
-                autoPlay={true}
-                src={this.audioUrl}
-            ></audio>,
             <p>
                 Now notice that this group has been completely closed in on the outside, although it
                 does still have liberties inside.
@@ -135,16 +96,6 @@ class Page3 extends Module3 {
 
     text(): JSX.Element | Array<JSX.Element> {
         return [
-            <button key="playButton" onClick={this.playAudio}>
-                Play Audio
-            </button>,
-            <audio
-                key="audioElement"
-                ref={this.audioRef}
-                style={{ visibility: "hidden" }}
-                autoPlay={true}
-                src={this.audioUrl}
-            ></audio>,
             <p>
                 If it's Blue's turn, a play in the middle will create a group with two separate
                 liberties inside. These are called eyes, and this group has two of them.
@@ -174,16 +125,6 @@ class Page4 extends Module3 {
 
     text(): JSX.Element | Array<JSX.Element> {
         return [
-            <button key="playButton" onClick={this.playAudio}>
-                Play Audio
-            </button>,
-            <audio
-                key="audioElement"
-                ref={this.audioRef}
-                style={{ visibility: "hidden" }}
-                autoPlay={true}
-                src={this.audioUrl}
-            ></audio>,
             <p>
                 White cannot play at either of the triangled points here, so Blue can never come
                 into atari. A group like this can not be captured because it has two eyes.
@@ -212,19 +153,7 @@ class Page5 extends Module3 {
     }
 
     text(): JSX.Element | Array<JSX.Element> {
-        return [
-            <button key="playButton" onClick={this.playAudio}>
-                Play Audio
-            </button>,
-            <audio
-                key="audioElement"
-                ref={this.audioRef}
-                style={{ visibility: "hidden" }}
-                autoPlay={true}
-                src={this.audioUrl}
-            ></audio>,
-            <p>What happens if White gets to play in the middle first?</p>,
-        ];
+        return [<p>What happens if White gets to play in the middle first?</p>];
     }
     config(): PuzzleConfig {
         return {
@@ -249,16 +178,6 @@ class Page6 extends Module3 {
 
     text(): JSX.Element | Array<JSX.Element> {
         return [
-            <button key="playButton" onClick={this.playAudio}>
-                Play Audio
-            </button>,
-            <audio
-                key="audioElement"
-                ref={this.audioRef}
-                style={{ visibility: "hidden" }}
-                autoPlay={true}
-                src={this.audioUrl}
-            ></audio>,
             <p>
                 If Blue tries to capture the stone by playing at 2, notice that all the blue stones
                 are now in atari at A.
@@ -293,16 +212,6 @@ class Page7 extends Module3 {
 
     text(): JSX.Element | Array<JSX.Element> {
         return [
-            <button key="playButton" onClick={this.playAudio}>
-                Play Audio
-            </button>,
-            <audio
-                key="audioElement"
-                ref={this.audioRef}
-                style={{ visibility: "hidden" }}
-                autoPlay={true}
-                src={this.audioUrl}
-            ></audio>,
             <p>It looks like White can't play at A because the team would have no liberties.</p>,
             <p>But playing at A captures six Blue stones first giving White three liberties.</p>,
             <p>Remember, any stone played must have liberties at the end of the turn.</p>,
@@ -339,16 +248,6 @@ class Page8 extends Module3 {
 
     text(): JSX.Element | Array<JSX.Element> {
         return [
-            <button key="playButton" onClick={this.playAudio}>
-                Play Audio
-            </button>,
-            <audio
-                key="audioElement"
-                ref={this.audioRef}
-                style={{ visibility: "hidden" }}
-                autoPlay={true}
-                src={this.audioUrl}
-            ></audio>,
             <p>
                 So a Blue play at A is obviously not a good move. It takes one of Blue's liberties.
                 And playing at B would also put Blue's group into atari.
@@ -379,16 +278,6 @@ class Page9 extends Module3 {
 
     text(): JSX.Element | Array<JSX.Element> {
         return [
-            <button key="playButton" onClick={this.playAudio}>
-                Play Audio
-            </button>,
-            <audio
-                key="audioElement"
-                ref={this.audioRef}
-                style={{ visibility: "hidden" }}
-                autoPlay={true}
-                src={this.audioUrl}
-            ></audio>,
             <p>
                 So perhaps Blue decides not to play at either point. The group is not in atari, so
                 what can White do anyway? Well, White can play at 1...
@@ -421,16 +310,6 @@ class Page10 extends Module3 {
 
     text(): JSX.Element | Array<JSX.Element> {
         return [
-            <button key="playButton" onClick={this.playAudio}>
-                Play Audio
-            </button>,
-            <audio
-                key="audioElement"
-                ref={this.audioRef}
-                style={{ visibility: "hidden" }}
-                autoPlay={true}
-                src={this.audioUrl}
-            ></audio>,
             <p>
                 Now Blue is again in atari, and White could capture by playing at A. But wait, White
                 is in atari too...
@@ -459,19 +338,7 @@ class Page11 extends Module3 {
     }
 
     text(): JSX.Element | Array<JSX.Element> {
-        return [
-            <button key="playButton" onClick={this.playAudio}>
-                Play Audio
-            </button>,
-            <audio
-                key="audioElement"
-                ref={this.audioRef}
-                style={{ visibility: "hidden" }}
-                autoPlay={true}
-                src={this.audioUrl}
-            ></audio>,
-            <p>So Blue can capture two stones with 1. Surely the group is okay now.</p>,
-        ];
+        return [<p>So Blue can capture two stones with 1. Surely the group is okay now.</p>];
     }
     config(): PuzzleConfig {
         return {
@@ -501,16 +368,6 @@ class Page12 extends Module3 {
 
     text(): JSX.Element | Array<JSX.Element> {
         return [
-            <button key="playButton" onClick={this.playAudio}>
-                Play Audio
-            </button>,
-            <audio
-                key="audioElement"
-                ref={this.audioRef}
-                style={{ visibility: "hidden" }}
-                autoPlay={true}
-                src={this.audioUrl}
-            ></audio>,
             <p>
                 What happens if White plays at 2? It's true, White is also in atari, so Blue can
                 capture again...
@@ -553,16 +410,6 @@ class Page13 extends Module3 {
 
     text(): JSX.Element | Array<JSX.Element> {
         return [
-            <button key="playButton" onClick={this.playAudio}>
-                Play Audio
-            </button>,
-            <audio
-                key="audioElement"
-                ref={this.audioRef}
-                style={{ visibility: "hidden" }}
-                autoPlay={true}
-                src={this.audioUrl}
-            ></audio>,
             <p>
                 But now the Blue group only has a single liberty, which means White can capture
                 seven stones at once. Ouch!
@@ -596,16 +443,6 @@ class Page14 extends Module3 {
 
     text(): JSX.Element | Array<JSX.Element> {
         return [
-            <button key="playButton" onClick={this.playAudio}>
-                Play Audio
-            </button>,
-            <audio
-                key="audioElement"
-                ref={this.audioRef}
-                style={{ visibility: "hidden" }}
-                autoPlay={true}
-                src={this.audioUrl}
-            ></audio>,
             <p>
                 Looking again, we see that the placement of a single stone can make all the
                 difference. Playing at A is the key point for both sides.
@@ -634,19 +471,7 @@ class Page15 extends Module3 {
     }
 
     text(): JSX.Element | Array<JSX.Element> {
-        return [
-            <button key="playButton" onClick={this.playAudio}>
-                Play Audio
-            </button>,
-            <audio
-                key="audioElement"
-                ref={this.audioRef}
-                style={{ visibility: "hidden" }}
-                autoPlay={true}
-                src={this.audioUrl}
-            ></audio>,
-            <p>Good job learning about eyes so far, this is tricky stuff!</p>,
-        ];
+        return [<p>Good job learning about eyes so far, this is tricky stuff!</p>];
     }
     axolotlFace() {
         return true;
