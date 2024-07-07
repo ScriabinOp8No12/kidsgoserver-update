@@ -280,6 +280,53 @@ class Page8 extends Module1 {
     }
 }
 
+class Page9 extends Module1 {
+    private successAudio: HTMLAudioElement;
+    constructor() {
+        super("no-audio-test.mp3");
+        this.successAudio = new Audio(
+            "https://res.cloudinary.com/dn8rdavoi/video/upload/v1708547864/audio-slices-less-pauses/slice13_less_pauses_revised_tanua8.mp3",
+        );
+    }
+    text(): JSX.Element | Array<JSX.Element> {
+        return [<p>Test puzzles!</p>];
+    }
+    config(): PuzzleConfig {
+        return {
+            mode: "puzzle",
+            flip_animated_capture_color: true,
+            initial_state: {
+                black: "d4d3e2f2g3e5",
+                white: "e4e3f5g4",
+            },
+            move_tree: this.makePuzzleMoveTree(["f4f3f4"], ["f3f4"]),
+        } as PuzzleConfig;
+    }
+    onSetGoban(goban: Goban): void {
+        goban.on("update", () => {
+            if (goban.engine.board[3][4] === 0) {
+                // Check that the location at 5 across and 4 down is empty, meaning we captured the snapback stones!
+                if (this.shouldPlayAudio) {
+                    this.successAudio
+                        .play()
+                        .catch((error) => console.error("Error playing success audio:", error));
+                }
+                this.captureDelay(() => {
+                    openPopup({
+                        text: <Axol>Good job!</Axol>,
+                        no_cancel: true,
+                        timeout: POPUP_TIMEOUT,
+                    })
+                        .then(() => {
+                            this.gotoNext();
+                        })
+                        .catch(() => 0);
+                });
+            }
+        });
+    }
+}
+
 class Puzzle1 extends Module1 {
     private successAudio: HTMLAudioElement;
 
@@ -481,6 +528,7 @@ export const module1: Array<typeof Content> = [
     Page6,
     Page7,
     Page8,
+    Page9,
 
     Puzzle1,
     Puzzle2,
