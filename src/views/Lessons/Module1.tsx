@@ -305,7 +305,7 @@ class Page9 extends Module1 {
     onSetGoban(goban: Goban): void {
         goban.on("update", () => {
             if (goban.engine.board[3][4] === 0) {
-                // Check that the location at 5 across and 4 down is empty, meaning we captured the snapback stones!
+                // Check that the location at 4 down and 5 across (0 indexed) is empty, meaning we captured the snapback stones!
                 if (this.shouldPlayAudio) {
                     this.successAudio
                         .play()
