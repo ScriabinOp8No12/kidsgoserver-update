@@ -299,7 +299,7 @@ class Page9 extends Module1 {
                 black: "d4d3e2f2g3e5",
                 white: "e4e3f5g4",
             },
-            move_tree: this.makePuzzleMoveTree(["f4f3f4"], ["f3f4"]),
+            move_tree: this.makePuzzleMoveTree(["f4f3f4"], ["f3f4f6g5g6"]),
         } as PuzzleConfig;
     }
     onSetGoban(goban: Goban): void {
