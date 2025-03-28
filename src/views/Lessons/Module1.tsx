@@ -24,7 +24,7 @@ import { openPopup } from "PopupDialog";
 const POPUP_TIMEOUT = 3000;
 
 class Module1 extends Content {
-    constructor(audioUrl: string, shouldPlayAudio?: boolean) {
+    constructor(audioUrl: string = "", shouldPlayAudio?: boolean) {
         super();
         this.audioUrl = audioUrl;
         // Make shouldPlayAudio optional, as only the puzzles need it for conditionally checking if we should render the audio when a user answers the puzzle right
@@ -283,7 +283,7 @@ class Page8 extends Module1 {
 class Page9 extends Module1 {
     private successAudio: HTMLAudioElement;
     constructor() {
-        super("no-audio-test.mp3");
+        super();
         this.successAudio = new Audio(
             "https://res.cloudinary.com/dn8rdavoi/video/upload/v1708547864/audio-slices-less-pauses/slice13_less_pauses_revised_tanua8.mp3",
         );
@@ -293,7 +293,6 @@ class Page9 extends Module1 {
     }
     config(): PuzzleConfig {
         return {
-            mode: "puzzle",
             flip_animated_capture_color: true,
             initial_state: {
                 black: "d4d3e2f2g3e5",
@@ -346,6 +345,8 @@ class Puzzle1 extends Module1 {
     }
     config(): PuzzleConfig {
         return {
+            width: 9,
+            height: 9,
             initial_state: {
                 black: "C7D6",
                 white: "D7",
@@ -355,7 +356,7 @@ class Puzzle1 extends Module1 {
     }
     onSetGoban(goban: Goban): void {
         goban.on("update", () => {
-            if (goban.engine.board[0][3] === 0) {
+            if (goban.engine.board[2][3] === 0) {
                 // If we chain the success audio after the captureDelay, the "good job audio clip" happens after we go to the next puzzle
                 if (this.shouldPlayAudio) {
                     this.successAudio
