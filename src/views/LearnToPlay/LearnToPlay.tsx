@@ -39,47 +39,71 @@ export function LearnToPlay(): JSX.Element {
             <div className="background-container">
                 <div className="back-background" />
                 <div className="background">
-                    <ChapterButton chapter={1} />
-                    <div
-                        className="chapter-text chapter-1-text"
-                        onClick={() => navigateToChapter(1, navigate)}
-                    >
-                        Capturing Stones
+                    <div className="chapter-container chapter-1-container">
+                        <ChapterButton chapter={1} />
+                        <div
+                            className="chapter-text"
+                            onClick={() => navigateToChapter(1, navigate)}
+                        >
+                            Capturing Stones
+                        </div>
                     </div>
-                    <ChapterButton chapter={2} />
-                    <div
-                        className="chapter-text chapter-2-text"
-                        onClick={() => navigateToChapter(2, navigate)}
-                    >
-                        Quest for Space
+
+                    <div className="chapter-container chapter-2-container">
+                        <ChapterButton chapter={2} />
+                        <div
+                            className="chapter-text"
+                            onClick={() => navigateToChapter(2, navigate)}
+                        >
+                            Quest for Space
+                        </div>
                     </div>
-                    <ChapterButton chapter={3} />
-                    <div
-                        className="chapter-text chapter-3-text"
-                        onClick={() => navigateToChapter(3, navigate)}
-                    >
-                        Eyes for Life
+
+                    {/* Continue the same pattern for remaining chapters */}
+                    <div className="chapter-container chapter-3-container">
+                        <ChapterButton chapter={3} />
+                        <div
+                            className="chapter-text"
+                            onClick={() => navigateToChapter(3, navigate)}
+                        >
+                            Eyes for Life
+                        </div>
                     </div>
-                    <ChapterButton chapter={4} />
-                    <div
-                        className="chapter-text chapter-4-text"
-                        onClick={() => navigateToChapter(4, navigate)}
-                    >
-                        Ko Battles
+
+                    <div className="chapter-container chapter-4-container">
+                        <ChapterButton chapter={4} />
+                        <div
+                            className="chapter-text"
+                            onClick={() => navigateToChapter(4, navigate)}
+                        >
+                            Ko Battles
+                        </div>
                     </div>
-                    <ChapterButton chapter={5} />
-                    <div
-                        className="chapter-text chapter-5-text"
-                        onClick={() => navigateToChapter(5, navigate)}
-                    >
-                        Magic Moves
+
+                    <div className="chapter-container chapter-5-container">
+                        <ChapterButton chapter={5} />
+                        <div
+                            className="chapter-text"
+                            onClick={() => navigateToChapter(5, navigate)}
+                        >
+                            Magic Moves
+                        </div>
                     </div>
-                    <ChapterButton chapter={6} />
-                    <div className="chapter-text chapter-6-text">Coming Soon</div>
-                    <ChapterButton chapter={7} />
-                    <div className="chapter-text chapter-7-text">Coming Soon</div>
-                    <ChapterButton chapter={8} />
-                    <div className="chapter-text chapter-8-text">Coming Soon</div>
+
+                    <div className="chapter-container chapter-6-container">
+                        <ChapterButton chapter={6} />
+                        <div className="chapter-text">Coming Soon</div>
+                    </div>
+
+                    <div className="chapter-container chapter-7-container">
+                        <ChapterButton chapter={7} />
+                        <div className="chapter-text">Coming Soon</div>
+                    </div>
+
+                    <div className="chapter-container chapter-8-container">
+                        <ChapterButton chapter={8} />
+                        <div className="chapter-text">Coming Soon</div>
+                    </div>
                 </div>
             </div>
             <div className="spacer" />
