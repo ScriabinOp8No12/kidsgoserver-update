@@ -103,7 +103,7 @@ export function Lesson({ chapter, page }: { chapter: number; page: number }): JS
     useEffect(() => {
         console.log("Constructing game ", chapter, page);
         const content = new chapters[chapter][page](shouldPlayAudio);
-
+        console.log("content", content)
         // Playing audio that matches text on learn-to-play pages
         if (audioRef.current) {
             audioRef.current.src = content.audioUrl;
@@ -347,24 +347,6 @@ export function Lesson({ chapter, page }: { chapter: number; page: number }): JS
                                 <span className="button-text">next</span>
                             </Link>
                         </div>
-                    </div>
-                </div>
-
-                <div className="portrait-bottom-buttons">
-                    <div className="left">
-                        <Link to={back} className="game-button-container">
-                            <span className="stone-button-left" />
-                            <span className="button-text">Back</span>
-                        </Link>
-                    </div>
-
-                    <div className="center">Lesson {chapter + 1}</div>
-
-                    <div className="right">
-                        <Link to={next} className="game-button-container">
-                            <span className="stone-button-right" />
-                            <span className="button-text">Next</span>
-                        </Link>
                     </div>
                 </div>
             </div>

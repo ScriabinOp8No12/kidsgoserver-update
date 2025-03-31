@@ -292,7 +292,9 @@ class Puzzle1 extends Module1 {
         this.successAudio = new Audio(
             "https://res.cloudinary.com/dn8rdavoi/video/upload/v1708547864/audio-slices-less-pauses/slice13_less_pauses_revised_tanua8.mp3",
         );
-    }
+        // Add this.state here, with the text "return [<p>Lets try some simple problems now. Try and capture the White stone.</p>];"
+        // In the onSetGoban area, we can use the goban.engine.board to conditionally render different text by using the setter function for the text state
+    }  
 
     text(): JSX.Element | Array<JSX.Element> {
         return [<p>Lets try some simple problems now. Try and capture the White stone.</p>];
@@ -308,6 +310,9 @@ class Puzzle1 extends Module1 {
     }
     onSetGoban(goban: Goban): void {
         goban.on("update", () => {
+            console.log("goban", goban)
+            console.log("goban.engine.board:", goban.engine.board);
+
             if (goban.engine.board[0][3] === 0) {
                 // If we chain the success audio after the captureDelay, the "good job audio clip" happens after we go to the next puzzle
                 if (this.shouldPlayAudio) {
