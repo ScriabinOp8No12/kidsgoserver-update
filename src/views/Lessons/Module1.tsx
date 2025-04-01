@@ -311,7 +311,7 @@ class Page9 extends Module1 {
                 }
                 // Emit text change event when user captures all the stones
                 this.emit("text-changed",  [<p>Well done, great capture!</p>])
-                // Check that the location at 4 down and 5 across (0 indexed) is empty, meaning we captured the snapback stones!
+
                 if (this.shouldPlayAudio) {
                     this.successAudio
                         .play()
