@@ -126,6 +126,12 @@ export function Lesson({ chapter, page }: { chapter: number; page: number }): JS
             setText(target_text);
         };
 
+        const textChangeListener = (newText: Array<JSX.Element>) => {
+            setText(newText);
+        };
+
+        content.on("text-changed", textChangeListener);
+
         if (content.hidePlayButton()) {
             setHidePlayButton(true);
         } else {
@@ -262,6 +268,7 @@ export function Lesson({ chapter, page }: { chapter: number; page: number }): JS
                 clearTimeout(t);
             }
             setText([]);
+            content.off("text-changed", textChangeListener)
             goban_ref.current.destroy();
             goban_ref.current = null;
             goban_opts_ref.current = null;

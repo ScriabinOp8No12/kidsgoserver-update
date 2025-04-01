@@ -303,7 +303,14 @@ class Page9 extends Module1 {
     }
     onSetGoban(goban: Goban): void {
         goban.on("update", () => {
+            console.log("goban", goban);
             if (goban.engine.board[3][4] === 0) {
+                if (goban.engine.board[3][5] === 1) {
+                // Emit text change event when user captures the stones in a snapback
+                this.emit("text-changed", [<p>Well done, this is called a snapback!</p>]);
+                }
+                // Emit text change event when user captures all the stones
+                this.emit("text-changed",  [<p>Well done, great capture!</p>])
                 // Check that the location at 4 down and 5 across (0 indexed) is empty, meaning we captured the snapback stones!
                 if (this.shouldPlayAudio) {
                     this.successAudio

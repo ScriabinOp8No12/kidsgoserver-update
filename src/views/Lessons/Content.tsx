@@ -23,6 +23,7 @@ import { TypedEventEmitter } from "TypedEventEmitter";
 
 interface Events {
     "animation-complete": void;
+    "text-changed": Array<JSX.Element>
 }
 
 interface Animation {
