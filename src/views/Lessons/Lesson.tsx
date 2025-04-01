@@ -78,6 +78,7 @@ export function Lesson({ chapter, page }: { chapter: number; page: number }): JS
     const [hidePlayButton, setHidePlayButton]: [boolean, (x: boolean) => void] =
         useState<boolean>(false);
     const [shouldPlayAudio, setShouldPlayAudio] = useState(true); // State for tracking audio on learn-to-play pages where it has audio matching the text, set to true initially, but can dynamically set it off localstorage if needed
+    const [audioUrl, setAudioUrl] = useState<string | null>(null);
     const onResize = useCallback((width, height) => {
         const goban = goban_ref.current;
         if (goban) {
@@ -103,7 +104,7 @@ export function Lesson({ chapter, page }: { chapter: number; page: number }): JS
     useEffect(() => {
         console.log("Constructing game ", chapter, page);
         const content = new chapters[chapter][page](shouldPlayAudio);
-        console.log("content", content)
+        setAudioUrl(content.audioUrl);
         // Playing audio that matches text on learn-to-play pages
         if (audioRef.current) {
             audioRef.current.src = content.audioUrl;
@@ -295,10 +296,18 @@ export function Lesson({ chapter, page }: { chapter: number; page: number }): JS
                 <div id="Lesson-bottom-container">
                     <div id="left-container">
                         <div className="explanation-text" onClick={cancel_animation_ref.current}>
-                            <button onClick={toggleAudio}>
-                                {shouldPlayAudio ? "Mute Audio" : "Play Audio"}
-                            </button>
-                            <audio ref={audioRef} style={{ display: "none" }} />
+                            {audioUrl && (
+                                <>
+                                    <button onClick={toggleAudio}>
+                                        {shouldPlayAudio ? "Mute Audio" : "Play Audio"}
+                                    </button>
+                                    <audio
+                                        ref={audioRef}
+                                        src={audioUrl}
+                                        style={{ display: "none" }}
+                                    />
+                                </>
+                            )}
                             {text}
                             {/* Text animation logic below */}
                             {/* {text.map((e, idx) => (
