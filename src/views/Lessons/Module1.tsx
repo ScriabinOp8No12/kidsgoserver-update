@@ -289,7 +289,7 @@ class Page9 extends Module1 {
         );
     }
     text(): JSX.Element | Array<JSX.Element> {
-        return [<p>Test puzzles!</p>];
+        return [<p>Testing snapback puzzle!</p>];
     }
     config(): PuzzleConfig {
         return {
