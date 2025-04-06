@@ -69,6 +69,12 @@ export function ComputerOpponents(props: OpponentListProperties): JSX.Element {
                 {(bots.length >= 1 || null) &&
                     bots.slice(0, 5).map((bot, index) => {
                         const { name, handicap, ui_class } = botOverrides[index];
+                        console.log(
+                            "CLICKED ON name, handicap, ui_class FOR BOT",
+                            name,
+                            handicap,
+                            ui_class,
+                        );
                         const [race, idx] = uiClassToRaceIdx(ui_class);
 
                         return (

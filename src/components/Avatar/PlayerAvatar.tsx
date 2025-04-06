@@ -20,7 +20,7 @@ import { Avatar } from "./Avatar";
 import { uiClassToRaceIdx } from "./util";
 import { Race } from "./avatar_list";
 import * as player_cache from "@/lib/player_cache";
-
+import { useUser } from "@/lib/hooks";
 export interface PlayerAvatarInterface {
     user_id: number;
 }
@@ -29,20 +29,30 @@ export function PlayerAvatar({ user_id }: PlayerAvatarInterface): JSX.Element {
     const [race, setRace] = React.useState<string>(null);
     const [idx, setIdx] = React.useState<number>();
 
+    const user = useUser();
+
+    // console.log("race and idx from PlayerAvatar", race, idx);
+    console.log("player_cache", player_cache);
+
+    // console.log("user.ui_class", user.ui_class);
+
     React.useEffect(() => {
         if (user_id) {
-            setRace(null);
-            setIdx(null);
-            player_cache
-                .fetch(user_id, ["ui_class"])
-                .then((user) => {
-                    const [r, i] = uiClassToRaceIdx(user.ui_class);
-                    setRace(r);
-                    setIdx(i);
-                })
-                .catch((err) => {
-                    console.error(err);
-                });
+            // setRace(null);
+            // setIdx(null);
+            // player_cache
+            //     .fetch(user_id, ["ui_class"])
+            //     .then((user) => {
+            const [r, i] = uiClassToRaceIdx(user.ui_class);
+            console.log("r and i", r, i);
+            setRace(r);
+            setIdx(i);
+            // })
+            // .catch((err) => {
+            //     console.error(err);
+            // });
+
+            // const [r, i] = uiClassToRaceIdx(user.ui_class)
         }
     }, [user_id]);
 

@@ -29,6 +29,7 @@ export interface AvatarInterface {
 }
 
 export function Avatar({ race, idx, small }: AvatarInterface): JSX.Element {
+    // console.log("race, idx, small", race, idx, small);
     return (
         <div className={"Avatar" + (small ? " small" : "")}>
             <div className={`Avatar-svg avatar-${race}-${idx}`} />

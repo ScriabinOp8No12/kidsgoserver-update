@@ -127,6 +127,7 @@ function NameSelection(): JSX.Element {
     }
 
     console.log("user", user);
+    console.log("user.ui_class", user.ui_class);
 
     const refresh = (e) => {
         setRefreshing(true);
