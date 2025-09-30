@@ -378,6 +378,7 @@ export function Puzzles({
                                 className="game-button-container"
                                 onClick={() => {
                                     removeHints();
+                                    goban_ref.current?.clearMessage();
                                 }}
                             >
                                 <span className="stone-button-left" />
@@ -388,6 +389,7 @@ export function Puzzles({
                                 onClick={() => {
                                     setReplay(Math.random());
                                     removeHints();
+                                    goban_ref.current?.clearMessage();
                                 }}
                             >
                                 <span className="stone-button-refresh" />
@@ -398,6 +400,7 @@ export function Puzzles({
                                 className="game-button-container"
                                 onClick={() => {
                                     removeHints();
+                                    goban_ref.current?.clearMessage();
                                 }}
                             >
                                 <span className="stone-button-right" />
@@ -414,6 +417,7 @@ export function Puzzles({
                             className="game-button-container"
                             onClick={() => {
                                 removeHints();
+                                goban_ref.current?.clearMessage();
                             }}
                         >
                             <span className="stone-button-left" />
@@ -431,6 +435,7 @@ export function Puzzles({
                             className="game-button-container"
                             onClick={() => {
                                 removeHints();
+                                goban_ref.current?.clearMessage();
                             }}
                         >
                             <span className="stone-button-right" />
@@ -452,6 +457,7 @@ export function Puzzles({
                     onClick={() => {
                         setReplay(Math.random());
                         removeHints();
+                        goban_ref.current?.clearMessage();
                     }}
                 />
             </div>
