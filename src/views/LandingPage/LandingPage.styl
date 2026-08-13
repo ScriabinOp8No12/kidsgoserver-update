@@ -72,6 +72,12 @@
         animation: intro-brighten 4s ease-out forwards;
     }
 
+    // The blue side areas outside the scene square, dimmed in step with the
+    // scene's brightness filter (#001533 at brightness 0.06 ~= #000103).
+    &.intro-darkened {
+        animation: intro-brighten-bg 4s ease-out forwards;
+    }
+
     .stars-animation {
         position: absolute;
         top: 0;
@@ -234,5 +240,17 @@
     }
     100% {
         filter: brightness(1);
+    }
+}
+
+@keyframes intro-brighten-bg {
+    0% {
+        background-color: #000103;
+    }
+    25% {
+        background-color: #000103;
+    }
+    100% {
+        background-color: #001533;
     }
 }

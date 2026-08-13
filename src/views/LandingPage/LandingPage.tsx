@@ -448,7 +448,7 @@ export function LandingPage(): JSX.Element {
     }
 
     return (
-        <div id="LandingPage">
+        <div id="LandingPage" className={assets_ready && !title_intro_done ? "intro-darkened" : ""}>
             <div className="spacer" />
             <div className="mountain-background">
                 {assets_ready && (
