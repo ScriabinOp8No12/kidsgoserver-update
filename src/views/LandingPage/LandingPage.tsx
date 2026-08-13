@@ -94,7 +94,7 @@ interface RocketAnimations {
 }
 
 function useRocketAnimations(cdnBase: string, rocket: "PLAY" | "LEARN"): RocketAnimations {
-    const popupVideo = `${cdnBase}/pages/home/HOME_POP-UP_${rocket}_ANIM_v02_stacked.mp4`;
+    const popupVideo = `${cdnBase}/pages/home/HOME_POP-UP_${rocket}_ANIM_v03_stacked.mp4`;
     const idleBase = useLottieAnimation(
         `${cdnBase}/pages/home/ROCKET_${rocket}_IDLE_BASE_v03.json`,
     );
@@ -225,7 +225,7 @@ function Cutscene({
         `${cdnBase}/pages/home/GFX_TRANSITION_AIRLOCK_${variant}_01_v04_loop.json`,
     );
     const skip = useLottieAnimation(`${cdnBase}/pages/home/BUTTON_SKIP_${variant}_v03.json`);
-    const videoUrl = `${cdnBase}/pages/home/KidsGoServer_Animation_CUT-SCENE_${variant}_v06.mp4`;
+    const videoUrl = `${cdnBase}/pages/home/KidsGoServer_Animation_CUT-SCENE_${variant}_v07.mp4`;
 
     const skipRef = React.useRef<LottieRefCurrentProps>(null);
     const videoRef = React.useRef<HTMLVideoElement>(null);
