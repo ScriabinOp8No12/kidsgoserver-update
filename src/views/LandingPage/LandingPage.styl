@@ -157,6 +157,11 @@
 
 // Full-screen cutscene overlay (airlock transition -> video -> skip button).
 .cutscene-overlay {
+    // Mounted but hidden during the launch animation so the video can buffer.
+    &.preloading {
+        display: none;
+    }
+
     position: fixed;
     top: 0;
     right: 0;

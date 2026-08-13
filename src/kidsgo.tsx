@@ -46,6 +46,7 @@ import { init_kidsgo_sfx } from "./lib/kidsgo-sfx";
 import { post } from "@/lib/requests";
 import { ai_host } from "@/lib/sockets";
 import { reload_page } from "./lib/reload_page";
+import { hide_loading_screen } from "./lib/loading-screen";
 
 import "./kidsgo.styl";
 
@@ -291,8 +292,11 @@ sockets.socket.on("ERROR", (msg) => {
 });
 
 /* Initialization done, render!! */
-const svg_loader = document.getElementById("loading-svg-container");
-svg_loader.parentNode.removeChild(svg_loader);
+// The landing page removes the raccoon loading screen itself once its assets
+// are ready; every other entry point tears it down now.
+if (window.location.pathname !== "/") {
+    hide_loading_screen();
+}
 
 const react_root = ReactDOM.createRoot(document.getElementById("main-content"));
 

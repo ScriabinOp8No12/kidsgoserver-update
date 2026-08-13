@@ -15,36 +15,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-// Opaque overlay above the app; keep in sync with the inline styles in
-// kidsgo-index.html.
-#loading-svg-container {
-    position: fixed;
-    left: 0;
-    top: 0;
-    background-color: #fff;
-    z-index: 5000;
-}
-
-#main-content {
-    display: block;
-    //color: var(--text-color);
-}
-
-html, body, #main-content {
-    height: 100%;
-    font-size: font-size-normal;
-    -webkit-backface-visibility:  hidden;
-    -webkit-tap-highlight-color:  transparent;
-    background-color: MISSING;
-    user-select: none;
-}
-html, body, #main-content {
-    margin: 0;
-    padding: 0;
-    min-height: 100%;
-}
-
-
-.space-font {
+/* Removes the bouncing-raccoon loading screen that index.html shows while the
+ * app boots. Safe to call more than once. */
+export function hide_loading_screen(): void {
+    const el = document.getElementById("loading-svg-container");
+    el?.parentNode?.removeChild(el);
 }
