@@ -23,6 +23,7 @@ import { hide_loading_screen } from "@kidsgo/lib/loading-screen";
 import { uiClassToRaceIdx, avatar_background_class } from "@kidsgo/components/Avatar";
 import { useUser } from "@/lib/hooks";
 import Lottie, { LottieRefCurrentProps } from "lottie-react";
+import { MatteVideo } from "@kidsgo/components/MatteVideo";
 
 const animationCache = new Map<string, object>();
 
@@ -87,12 +88,13 @@ interface RocketAnimations {
     launchBase: object | null;
     launchSmoke: object | null;
     launchCraft: object | null;
-    popup: object | null;
+    popupVideo: string;
     // True once the idle layers that show during the dark intro are all loaded.
     ready: boolean;
 }
 
 function useRocketAnimations(cdnBase: string, rocket: "PLAY" | "LEARN"): RocketAnimations {
+    const popupVideo = `${cdnBase}/pages/home/HOME_POP-UP_${rocket}_ANIM_v02_stacked.mp4`;
     const idleBase = useLottieAnimation(
         `${cdnBase}/pages/home/ROCKET_${rocket}_IDLE_BASE_v03.json`,
     );
@@ -120,7 +122,7 @@ function useRocketAnimations(cdnBase: string, rocket: "PLAY" | "LEARN"): RocketA
         launchCraft: useLottieAnimation(
             `${cdnBase}/pages/home/ROCKET_${rocket}_LAUNCH_CRAFT_v04.json`,
         ),
-        popup: useLottieAnimation(`${cdnBase}/pages/home/HOME_POP-UP_${rocket}_ANIM_v02.json`),
+        popupVideo,
         ready: !!idleBase && !!idleSmoke && !!idleCraft,
     };
 }
@@ -346,6 +348,8 @@ export function LandingPage(): JSX.Element {
     );
     const [learn_hovering, set_learn_hovering] = React.useState(false);
     const [play_hovering, set_play_hovering] = React.useState(false);
+    const learn_popup_showing = learn_hovering && !learn_to_play_launching;
+    const play_popup_showing = play_hovering && !play_launching;
     // Set at rocket-click so the cutscene preloads; it stays hidden until
     // cutscene_visible flips true once the rocket has flown off.
     const [cutscene, set_cutscene] = React.useState<{
@@ -465,22 +469,20 @@ export function LandingPage(): JSX.Element {
                                 className="raccoon-animation"
                             />
                         )}
-                        {learn_hovering && !learn_to_play_launching && learnAnimations.popup && (
-                            <Lottie
-                                animationData={learnAnimations.popup}
-                                loop={false}
-                                autoplay
-                                className="rocket-popup learn-popup"
-                            />
-                        )}
-                        {play_hovering && !play_launching && playAnimations.popup && (
-                            <Lottie
-                                animationData={playAnimations.popup}
-                                loop={false}
-                                autoplay
-                                className="rocket-popup play-popup"
-                            />
-                        )}
+                        <MatteVideo
+                            src={learnAnimations.popupVideo}
+                            playing={learn_popup_showing}
+                            className={`rocket-popup learn-popup ${
+                                learn_popup_showing ? "visible" : ""
+                            }`}
+                        />
+                        <MatteVideo
+                            src={playAnimations.popupVideo}
+                            playing={play_popup_showing}
+                            className={`rocket-popup play-popup ${
+                                play_popup_showing ? "visible" : ""
+                            }`}
+                        />
                         <Rocket
                             className="learn-to-play-rocket"
                             animations={learnAnimations}

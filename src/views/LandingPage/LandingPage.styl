@@ -136,6 +136,12 @@
         aspect-ratio: 1;
         pointer-events: none;
         z-index: z.rocket + 1;
+        // Stays mounted (so the video preloads) but hidden until hover.
+        visibility: hidden;
+
+        &.visible {
+            visibility: visible;
+        }
     }
 
     .learn-popup {
