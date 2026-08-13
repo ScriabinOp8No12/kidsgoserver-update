@@ -98,13 +98,21 @@
                 fade-in 2s;
         }
 
+        /* Opaque overlay: the app renders underneath while the raccoon
+           bounces, so this must fully cover the page until the app removes
+           it. */
         #loading-svg-container {
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100vw;
             height: 100vh;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             flex-direction: column;
+            background-color: #fff;
+            z-index: 5000;
         }
     </style>
     {{EXTRA_CONFIG}}

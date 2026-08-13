@@ -16,10 +16,14 @@
  */
 
 
+// Opaque overlay above the app; keep in sync with the inline styles in
+// kidsgo-index.html.
 #loading-svg-container {
-    position: absolute;
+    position: fixed;
     left: 0;
     top: 0;
+    background-color: #fff;
+    z-index: 5000;
 }
 
 #main-content {
