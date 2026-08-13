@@ -369,6 +369,10 @@ export function LandingPage(): JSX.Element {
         !!titleIdle &&
         learnAnimations.ready &&
         playAnimations.ready;
+    // Fallback if an asset fetch fails: show whatever loaded rather than
+    // leaving a blank page behind the removed loading screen.
+    const [assets_timed_out, set_assets_timed_out] = React.useState(false);
+    const show_scene = assets_ready || assets_timed_out;
 
     // kidsgo.tsx leaves the raccoon loading screen up for us; remove it once
     // our animations are ready (or after a safety timeout / on unmount) so
@@ -378,7 +382,10 @@ export function LandingPage(): JSX.Element {
             hide_loading_screen();
             return;
         }
-        const t = setTimeout(hide_loading_screen, 15000);
+        const t = setTimeout(() => {
+            set_assets_timed_out(true);
+            hide_loading_screen();
+        }, 10000);
         return () => clearTimeout(t);
     }, [assets_ready]);
     React.useEffect(() => hide_loading_screen, []);
@@ -448,10 +455,10 @@ export function LandingPage(): JSX.Element {
     }
 
     return (
-        <div id="LandingPage" className={assets_ready && !title_intro_done ? "intro-darkened" : ""}>
+        <div id="LandingPage" className={show_scene && !title_intro_done ? "intro-darkened" : ""}>
             <div className="spacer" />
             <div className="mountain-background">
-                {assets_ready && (
+                {show_scene && (
                     <div className={`scene ${title_intro_done ? "" : "intro-darkened"}`}>
                         {starsAnimation && (
                             <Lottie
@@ -499,23 +506,25 @@ export function LandingPage(): JSX.Element {
                         />
                     </div>
                 )}
-                {assets_ready &&
-                    (title_intro_done ? (
-                        <Lottie
-                            animationData={titleIdle}
-                            loop
-                            autoplay
-                            className="title-animation"
-                        />
-                    ) : (
-                        <Lottie
-                            animationData={titleIntro}
-                            loop={false}
-                            autoplay
-                            onComplete={() => set_title_intro_done(true)}
-                            className="title-animation"
-                        />
-                    ))}
+                {show_scene &&
+                    (title_intro_done
+                        ? titleIdle && (
+                              <Lottie
+                                  animationData={titleIdle}
+                                  loop
+                                  autoplay
+                                  className="title-animation"
+                              />
+                          )
+                        : titleIntro && (
+                              <Lottie
+                                  animationData={titleIntro}
+                                  loop={false}
+                                  autoplay
+                                  onComplete={() => set_title_intro_done(true)}
+                                  className="title-animation"
+                              />
+                          ))}
             </div>
             <div className="spacer" />
             {cutscene && (

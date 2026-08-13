@@ -108,7 +108,9 @@ export function MatteVideo({
             if (disposed) {
                 return;
             }
-            if (video.videoWidth) {
+            // The rAF fallback loops at display rate even while paused; skip
+            // the texture upload/draw then (rVFC only fires on new frames).
+            if (video.videoWidth && !video.paused) {
                 if (canvas.width !== video.videoWidth) {
                     canvas.width = video.videoWidth;
                     canvas.height = video.videoHeight / 2;
