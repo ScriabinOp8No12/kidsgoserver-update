@@ -167,7 +167,6 @@
     }
 }
 
-// Full-screen cutscene overlay (airlock transition -> video -> skip button).
 .cutscene-overlay {
     // Mounted but hidden during the launch animation so the video can buffer.
     &.preloading {
@@ -208,7 +207,7 @@
 // Wraps the skip Lottie. The button art sits centered inside a large transparent
 // canvas, so we shrink the canvas and tuck it into the bottom-right corner (the
 // negative offsets let the empty padding hang off-screen so the button hugs the
-// corner). Tune size via width/height, position via right/bottom.
+// corner).
 .cutscene-skip {
     top: auto;
     left: auto;

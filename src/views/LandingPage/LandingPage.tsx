@@ -360,8 +360,8 @@ export function LandingPage(): JSX.Element {
 
     // Gate the whole intro on every asset being ready so that on refresh the
     // scene never flashes a fully-lit raccoon before the dark-to-bright intro
-    // plays. Until this is true we render nothing; once true, everything mounts
-    // at once and the title intro + brightening start together.
+    // plays; once true, everything mounts at once and the title intro +
+    // brightening start together.
     const assets_ready =
         !!starsAnimation &&
         !!raccoonAnimation &&
