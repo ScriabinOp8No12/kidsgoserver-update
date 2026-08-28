@@ -32,9 +32,6 @@ const animationCache = new Map<string, object>();
 // would otherwise only fetch once the page renders. Deduped by URL; the map
 // holds the Image handles so in-flight loads can't be garbage collected.
 const preloaded_images = new Map<string, HTMLImageElement>();
-// Paths whose preload fetch is already in flight, so a second click doesn't
-// start a duplicate request before the first lands in animationCache.
-const preloaded_animations = new Set<string>();
 function preload_image(url: string) {
     if (preloaded_images.has(url)) {
         return;
@@ -44,19 +41,37 @@ function preload_image(url: string) {
     preloaded_images.set(url, img);
 }
 
+// In-flight animation fetches keyed by path, so every consumer of the same
+// path (preload_animation, useLottieAnimation) shares one request instead of
+// each starting its own before the first lands in animationCache.
+const pendingAnimations = new Map<string, Promise<object>>();
+function loadAnimation(path: string): Promise<object> {
+    const cached = animationCache.get(path);
+    if (cached) {
+        return Promise.resolve(cached);
+    }
+    let pending = pendingAnimations.get(path);
+    if (!pending) {
+        pending = fetch(path, { credentials: "omit" })
+            .then((r) => r.json())
+            .then((data: object) => {
+                animationCache.set(path, data);
+                return data;
+            })
+            .finally(() => pendingAnimations.delete(path));
+        pendingAnimations.set(path, pending);
+    }
+    return pending;
+}
+
 // Warm animationCache ahead of the component that needs the animation, so it
 // is ready the moment that component mounts rather than starting its fetch
-// then. useLottieAnimation() reads the same cache, so a warmed entry means it
-// returns the data on its first render instead of after a round trip.
+// then. useLottieAnimation() shares the same in-flight request, so even if the
+// component mounts before this lands it won't start a second fetch.
 function preload_animation(path: string) {
-    if (animationCache.has(path) || preloaded_animations.has(path)) {
-        return;
-    }
-    preloaded_animations.add(path);
-    fetch(path, { credentials: "omit" })
-        .then((r) => r.json())
-        .then((data) => animationCache.set(path, data))
-        .catch(() => preloaded_animations.delete(path));
+    loadAnimation(path).catch(() => {
+        // Nothing to do; the consuming component will retry and log.
+    });
 }
 
 function useLottieAnimation(path: string): object | null {
@@ -64,23 +79,21 @@ function useLottieAnimation(path: string): object | null {
         animationCache.get(path) ?? null,
     );
     React.useEffect(() => {
-        if (animationCache.has(path)) {
-            setAnimation(animationCache.get(path)!);
-            return;
-        }
-        const controller = new AbortController();
-        fetch(path, { signal: controller.signal, credentials: "omit" })
-            .then((r) => r.json())
+        let cancelled = false;
+        loadAnimation(path)
             .then((data) => {
-                animationCache.set(path, data);
-                setAnimation(data);
+                if (!cancelled) {
+                    setAnimation(data);
+                }
             })
             .catch((err) => {
-                if (err.name !== "AbortError") {
+                if (!cancelled) {
                     console.error(err);
                 }
             });
-        return () => controller.abort();
+        return () => {
+            cancelled = true;
+        };
     }, [path]);
     return animation;
 }
