@@ -23,6 +23,12 @@ import Lottie, { LottieRefCurrentProps } from "lottie-react";
 // segment played in reverse.
 const CLOSE_END_FRAME = 24;
 
+// The composition is 60fps, so the authored close is only 24/60 = 0.4s (0.8s
+// for the full close + open) -- fast enough that the whole transition reads as
+// a flicker rather than as doors. Slow playback down so the movement is
+// legible: 0.4 stretches the full close + open to ~2s.
+const AIRLOCK_SPEED = 0.4;
+
 interface AirlockRequest {
     animationData: object;
     onClosed: () => void;
@@ -71,6 +77,7 @@ export function AirlockTransition(): JSX.Element | null {
     // commit costs nothing visible.
     React.useEffect(() => {
         if (phase === "opening") {
+            lottieRef.current?.setSpeed(AIRLOCK_SPEED);
             lottieRef.current?.playSegments([CLOSE_END_FRAME, 0], true);
         }
     }, [phase]);
@@ -86,7 +93,10 @@ export function AirlockTransition(): JSX.Element | null {
                 animationData={request.animationData}
                 loop={false}
                 autoplay={false}
-                onDOMLoaded={() => lottieRef.current?.playSegments([0, CLOSE_END_FRAME], true)}
+                onDOMLoaded={() => {
+                    lottieRef.current?.setSpeed(AIRLOCK_SPEED);
+                    lottieRef.current?.playSegments([0, CLOSE_END_FRAME], true);
+                }}
                 onComplete={() => {
                     if (phase === "closing") {
                         // Doors fully shut: swap the page underneath. The

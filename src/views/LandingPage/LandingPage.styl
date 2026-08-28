@@ -124,6 +124,13 @@
         animation: intro-brighten-foreground 4s ease-out forwards;
     }
 
+    // A hovered rocket lifts above its neighbour so its popup -- which is now
+    // a child, and so trapped in this rocket's stacking context -- can never
+    // be overlapped by the other rocket.
+    .learn-to-play-rocket:hover, .play-rocket:hover {
+        z-index: z.rocket + 2;
+    }
+
     .learn-to-play-rocket, .play-rocket {
         position: absolute;
         bottom: calc(var(--ROCKETHEIGHT) * 0.1 + 0.8rem);
@@ -145,13 +152,19 @@
 
     }
 
-    // Positioned relative to the square mountain-background so the popup lands
-    // between the rocket and the raccoon regardless of viewport aspect ratio.
-    // Proportions measured from the reference video.
+    // The popup is a child of its rocket, so its offsets are --ROCKETWIDTH
+    // multiples and it stays pinned to the rocket at every aspect ratio.
+    // Width still tracks the scene square (the old 39%, restated in viewport
+    // units because a % here would resolve against the narrow rocket box), so
+    // the bubble keeps growing on large displays as it always did. The video
+    // is a square canvas with the bubble centred inside and only about half as
+    // wide as the canvas, so the offsets are measured to the bubble, not the
+    // canvas edge. The bubble sits inboard of its rocket, in the gap before
+    // the raccoon, level with the mountain peaks.
     .rocket-popup {
         position: absolute;
-        bottom: 28%;
-        width: 39%;
+        bottom: "calc(var(--ROCKETWIDTH) * 0.86)" % "";
+        width: "calc(min(100vw, 100vh) * 0.39)" % "";
         aspect-ratio: 1;
         pointer-events: none;
         z-index: z.rocket + 1;
@@ -163,12 +176,16 @@
         }
     }
 
+    // Each popup leans inboard, into the gap between its rocket and the
+    // raccoon, so it reads as belonging to that rocket without covering it.
     .learn-popup {
-        left: 17.5%;
+        left: 50%;
+        transform: "translateX(calc(-50% + var(--ROCKETWIDTH) * 0.89))" % "";
     }
 
     .play-popup {
-        right: 17.5%;
+        right: 50%;
+        transform: "translateX(calc(50% - var(--ROCKETWIDTH) * 0.83))" % "";
     }
 
     .learn-to-play-rocket {

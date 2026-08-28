@@ -144,12 +144,16 @@ function LaunchLayer({ data }: { data: object }): JSX.Element {
 
 function Rocket({
     className,
+    popupClassName,
+    popupShowing,
     animations,
     launching,
     onClick,
     onHoverChange,
 }: {
     className: string;
+    popupClassName: string;
+    popupShowing: boolean;
     animations: RocketAnimations;
     launching: boolean;
     onClick: () => void;
@@ -170,6 +174,11 @@ function Rocket({
             onMouseEnter={() => set_hovering(true)}
             onMouseLeave={() => set_hovering(false)}
         >
+            <MatteVideo
+                src={animations.popupVideo}
+                playing={popupShowing}
+                className={`rocket-popup ${popupClassName} ${popupShowing ? "visible" : ""}`}
+            />
             {launching ? (
                 <>
                     {animations.launchSmoke && <LaunchLayer data={animations.launchSmoke} />}
@@ -302,8 +311,12 @@ function Cutscene({
                 playsInline
                 onEnded={endVideo}
                 onError={() => setVideoFailed(true)}
+                // Stays visible through the airlock phase too: the video is
+                // paused (not reset) at the end of the cutscene, so it holds
+                // its last frame for the doors to close over. Hiding it here
+                // exposed the overlay's black background between the doors.
                 className={`cutscene-square cutscene-video ${
-                    active && phase === "video" ? "visible" : ""
+                    active && (phase === "video" || phase === "airlock") ? "visible" : ""
                 }`}
             />
             {active && phase === "video" && skip && (
@@ -478,22 +491,10 @@ export function LandingPage(): JSX.Element {
                                 className="raccoon-animation"
                             />
                         )}
-                        <MatteVideo
-                            src={learnAnimations.popupVideo}
-                            playing={learn_popup_showing}
-                            className={`rocket-popup learn-popup ${
-                                learn_popup_showing ? "visible" : ""
-                            }`}
-                        />
-                        <MatteVideo
-                            src={playAnimations.popupVideo}
-                            playing={play_popup_showing}
-                            className={`rocket-popup play-popup ${
-                                play_popup_showing ? "visible" : ""
-                            }`}
-                        />
                         <Rocket
                             className="learn-to-play-rocket"
+                            popupClassName="learn-popup"
+                            popupShowing={learn_popup_showing}
                             animations={learnAnimations}
                             launching={learn_to_play_launching}
                             onClick={learnToPlay}
@@ -501,6 +502,8 @@ export function LandingPage(): JSX.Element {
                         />
                         <Rocket
                             className="play-rocket"
+                            popupClassName="play-popup"
+                            popupShowing={play_popup_showing}
                             animations={playAnimations}
                             launching={play_launching}
                             onClick={play}
