@@ -16,11 +16,8 @@
  */
 
 :root {
-    // Sized off the scene square (min(100vw, 100vh)), the same basis the
-    // background and .rocket-popup use, so the rockets stay a fixed fraction
-    // of the scene at every viewport size. A hard rem cap here used to freeze
-    // them at 160px past ~800px wide, leaving them tiny on large monitors
-    // while the rest of the scene kept growing.
+    // Tracks the scene square, like the background and popups, so the rockets
+    // scale with it instead of freezing at a fixed cap on large monitors.
     --ROCKETWIDTH: "min(20vw, 20vh)" % "";
     --ROCKETHEIGHT: calc(var(--ROCKETWIDTH) * 3);
 }
@@ -103,10 +100,8 @@
         z-index: 3;
     }
 
-    // The foreground layers hold their own extra darkness after the scene
-    // filter has started lifting, so the light reads as travelling from the
-    // background forward. The raccoon and rockets share one curve so they
-    // brighten at an identical rate. Multiplies with the .scene filter above.
+    // Foreground holds its own darkness after the scene filter starts lifting,
+    // so the light reads as travelling from the background forward.
     .scene.intro-darkened .raccoon-animation {
         animation: intro-brighten-foreground 4s ease-out forwards;
     }
@@ -129,20 +124,16 @@
         animation: intro-brighten-foreground 4s ease-out forwards;
     }
 
-    // A hovered rocket lifts above its neighbour so its popup -- which is now
-    // a child, and so trapped in this rocket's stacking context -- can never
-    // be overlapped by the other rocket.
+    // Lifts the hovered rocket above its neighbour: the popup is a child, so
+    // it's trapped in this rocket's stacking context.
     .learn-to-play-rocket:hover, .play-rocket:hover {
         z-index: z.rocket + 2;
     }
 
     .learn-to-play-rocket, .play-rocket {
         position: absolute;
-        // Percentage of the scene square so the rockets sit on the green ledge
-        // in the background art at every size. The old value mixed a rocket-
-        // relative term with a fixed 0.8rem, both anchored to the viewport
-        // bottom rather than the ledge, so on large screens the rockets sank
-        // below it. The raccoon platform tracks the same ledge at 8%.
+        // Percentage of the scene square, so the rockets stay on the green
+        // ledge in the background art at every size.
         bottom: 8%;
         width: var(--ROCKETWIDTH);
         text-align: center;
@@ -162,15 +153,11 @@
 
     }
 
-    // The popup is a child of its rocket, so its offsets are --ROCKETWIDTH
-    // multiples and it stays pinned to the rocket at every aspect ratio.
-    // Width still tracks the scene square (the old 39%, restated in viewport
-    // units because a % here would resolve against the narrow rocket box), so
-    // the bubble keeps growing on large displays as it always did. The video
-    // is a square canvas with the bubble centred inside and only about half as
-    // wide as the canvas, so the offsets are measured to the bubble, not the
-    // canvas edge. The bubble sits inboard of its rocket, in the gap before
-    // the raccoon, level with the mountain peaks.
+    // A child of its rocket, so offsets are --ROCKETWIDTH multiples and it
+    // stays pinned at every aspect ratio. Width is in viewport units because a
+    // % would resolve against the narrow rocket box. The bubble sits centred
+    // in a square canvas about twice its width, so offsets are measured to the
+    // bubble, not the canvas edge.
     .rocket-popup {
         position: absolute;
         bottom: "calc(var(--ROCKETWIDTH) * 0.86)" % "";
@@ -186,8 +173,8 @@
         }
     }
 
-    // Each popup leans inboard, into the gap between its rocket and the
-    // raccoon, so it reads as belonging to that rocket without covering it.
+    // Leans inboard, into the gap before the raccoon, so it reads as belonging
+    // to its rocket without covering it.
     .learn-popup {
         left: 50%;
         transform: "translateX(calc(-50% + var(--ROCKETWIDTH) * 0.89))" % "";
@@ -198,9 +185,8 @@
         transform: "translateX(calc(50% - var(--ROCKETWIDTH) * 0.83))" % "";
     }
 
-    // Inset from the scene square's edge, not the viewport, so the rockets sit
-    // in the same spot within the scene at every aspect ratio. .mountain-background
-    // is the square itself, so a percentage here resolves against it.
+    // Inset from .mountain-background (the scene square), not the viewport, so
+    // the rockets hold their place in the art at every aspect ratio.
     .learn-to-play-rocket {
         left: 9%;
     }
@@ -226,8 +212,8 @@
     overflow: hidden;
 }
 
-// The video and skip art are square; size each to the
-// largest square that fits the viewport, centered, matching the home framing.
+// The video and skip art are square; size each to the largest square that fits
+// the viewport, centered, matching the home framing.
 .cutscene-square {
     position: absolute;
     top: 50%;
@@ -248,12 +234,10 @@
 }
 
 // Wraps the skip Lottie. The button art sits centered inside a large transparent
-// canvas, so we shrink the canvas and tuck it into the bottom-right corner. The
-// offsets are a share of the canvas itself (not the viewport) so the empty
-// padding hangs off by the same amount at every aspect ratio -- percentage
-// offsets against the full-screen overlay pushed the button clean off the
-// bottom of tall phone viewports. --skip-size tracks the video square rather
-// than the viewport for the same reason.
+// canvas, so we shrink the canvas and tuck it into the bottom-right corner.
+// Offsets are a share of that canvas, not the viewport, so the empty padding
+// hangs off by the same amount everywhere -- viewport percentages pushed the
+// button off the bottom of tall phones.
 .cutscene-skip {
     --skip-size: "max(170px, min(42vw, 30vh))" % "";
 
@@ -290,10 +274,8 @@
     }
 }
 
-// Extra darkness held on top of the scene filter, shared by every foreground
-// element. The background lifts first (see intro-brighten); the raccoon and
-// rockets then lighten together on one identical curve, like a single light
-// source reaching everything in front of it at the same moment and rate.
+// Shared by every foreground element, so they lighten on one identical curve
+// after the background has started lifting (see intro-brighten).
 @keyframes intro-brighten-foreground {
     0% {
         filter: brightness(0.15);

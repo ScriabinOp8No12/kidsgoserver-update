@@ -93,9 +93,8 @@ export const routes = (
                 <Route path="/" element={<Default />} />
                 <Route path="/*" element={<PageNotFound />} />
             </Routes>
-            {/* Mounted outside <Routes> so the airlock door transition
-                survives the navigation that happens while the doors are
-                shut. */}
+            {/* Outside <Routes> so it survives the navigation that happens
+                while the airlock doors are shut. */}
             <AirlockTransition />
         </Main>
     </BrowserRouter>

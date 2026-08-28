@@ -18,15 +18,12 @@
 import * as React from "react";
 import Lottie, { LottieRefCurrentProps } from "lottie-react";
 
-// The v04 airlock compositions close the doors over frames 0-24 and then just
-// hold them closed; there is no authored opening, so the open is the close
-// segment played in reverse.
+// The compositions close over frames 0-24 and then hold; there is no authored
+// opening, so the open is this segment reversed.
 const CLOSE_END_FRAME = 24;
 
-// The composition is 60fps, so the authored close is only 24/60 = 0.4s (0.8s
-// for the full close + open) -- fast enough that the whole transition reads as
-// a flicker rather than as doors. Slow playback down so the movement is
-// legible: 0.4 stretches the full close + open to ~2s.
+// At the composition's native 60fps the close + open runs 0.8s, which reads as
+// a flicker rather than as doors. 0.4 stretches it to ~2s.
 const AIRLOCK_SPEED = 0.4;
 
 interface AirlockRequest {
@@ -37,12 +34,10 @@ interface AirlockRequest {
 let submit_request: ((req: AirlockRequest) => void) | null = null;
 
 /**
- * Play the full-screen airlock door transition: the doors slide closed over
- * whatever is currently on screen, `onClosed` fires while they are fully shut
- * (navigate to the destination page there), then the doors slide open again
- * revealing whatever replaced it. If the animation data is missing or the
- * overlay host isn't mounted, `onClosed` is called immediately instead so the
- * caller still navigates.
+ * Play the full-screen airlock door transition. `onClosed` fires while the
+ * doors are fully shut -- navigate there -- and they then open on whatever
+ * replaced the page. Called immediately if the animation data is missing or
+ * the overlay host isn't mounted, so the caller still navigates.
  */
 export function playAirlockTransition(animationData: object | null, onClosed: () => void): void {
     if (!animationData || !submit_request) {
@@ -52,8 +47,8 @@ export function playAirlockTransition(animationData: object | null, onClosed: ()
     submit_request({ animationData, onClosed });
 }
 
-// Mounted once, above the router's page content, so the overlay survives the
-// navigation that happens mid-transition while the doors are shut.
+// Mounted once above the router's page content, so the overlay survives the
+// navigation that happens while the doors are shut.
 export function AirlockTransition(): JSX.Element | null {
     const [request, setRequest] = React.useState<AirlockRequest | null>(null);
     const [phase, setPhase] = React.useState<"closing" | "opening">("closing");
@@ -69,12 +64,9 @@ export function AirlockTransition(): JSX.Element | null {
         };
     }, []);
 
-    // Start the opening animation only once React has committed the
-    // destination page that onClosed() navigated to. Mounting that page is
-    // synchronous work on the same thread Lottie animates on, so opening the
-    // doors in the same tick as the navigation made the animation stutter on
-    // slower devices. The doors cover the viewport while shut, so the extra
-    // commit costs nothing visible.
+    // Deferred one commit past onClosed(): mounting the destination page is
+    // synchronous work on the thread Lottie animates on, so opening in the same
+    // tick stuttered on slower devices. The shut doors hide the extra frame.
     React.useEffect(() => {
         if (phase !== "opening") {
             return;
@@ -83,10 +75,8 @@ export function AirlockTransition(): JSX.Element | null {
         if (!lottie) {
             return;
         }
-        // playSegments() resets playback state, so re-assert the speed after
-        // it rather than before: setting it first left the open running at the
-        // composition's native 60fps while the close ran slowed, which read as
-        // the doors snapping open on slower devices.
+        // playSegments() resets playback state, so the speed has to be set
+        // after it -- setting it first left the open running at native 60fps.
         lottie.playSegments([CLOSE_END_FRAME, 0], true);
         lottie.setSpeed(AIRLOCK_SPEED);
     }, [phase]);
@@ -108,8 +98,7 @@ export function AirlockTransition(): JSX.Element | null {
                 }}
                 onComplete={() => {
                     if (phase === "closing") {
-                        // Doors fully shut: swap the page underneath. The
-                        // effect above opens them once that page has mounted.
+                        // Fully shut: swap the page underneath.
                         request.onClosed();
                         setPhase("opening");
                     } else {

@@ -21,15 +21,12 @@
     right: 0;
     bottom: 0;
     left: 0;
-    // Above the landing page's cutscene overlay (1000) and its skip button
-    // (1001) so the doors close over both.
+    // Above the cutscene overlay (1000) and its skip button (1001).
     z-index: 1002;
     overflow: hidden;
 
-    // The airlock art is a square composition; scale it to *cover* the
-    // viewport (rather than fit inside it like the cutscene square) so the
-    // closed doors hide the page edge to edge -- no black bars while the
-    // doors open onto the destination page.
+    // Square art scaled to *cover* the viewport, not fit inside it like the
+    // cutscene square, so the shut doors hide the page edge to edge.
     .airlock-square {
         position: absolute;
         top: 50%;

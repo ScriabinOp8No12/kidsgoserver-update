@@ -28,9 +28,9 @@ import { playAirlockTransition } from "@kidsgo/components/AirlockTransition";
 
 const animationCache = new Map<string, object>();
 
-// Warms CSS background images for the destination pages, which the browser
-// would otherwise only fetch once the page renders. Deduped by URL; the map
-// holds the Image handles so in-flight loads can't be garbage collected.
+// Warms destination-page CSS background art, which the browser would otherwise
+// only fetch on render. The map holds the Image handles so in-flight loads
+// can't be garbage collected.
 const preloaded_images = new Map<string, HTMLImageElement>();
 function preload_image(url: string) {
     if (preloaded_images.has(url)) {
@@ -41,9 +41,8 @@ function preload_image(url: string) {
     preloaded_images.set(url, img);
 }
 
-// In-flight animation fetches keyed by path, so every consumer of the same
-// path (preload_animation, useLottieAnimation) shares one request instead of
-// each starting its own before the first lands in animationCache.
+// Shared so preload_animation and useLottieAnimation don't each fetch the same
+// path before the first lands in animationCache.
 const pendingAnimations = new Map<string, Promise<object>>();
 function loadAnimation(path: string): Promise<object> {
     const cached = animationCache.get(path);
@@ -64,13 +63,10 @@ function loadAnimation(path: string): Promise<object> {
     return pending;
 }
 
-// Warm animationCache ahead of the component that needs the animation, so it
-// is ready the moment that component mounts rather than starting its fetch
-// then. useLottieAnimation() shares the same in-flight request, so even if the
-// component mounts before this lands it won't start a second fetch.
+// Warm the cache ahead of the component that needs the animation.
 function preload_animation(path: string) {
     loadAnimation(path).catch(() => {
-        // Nothing to do; the consuming component will retry and log.
+        // The consuming component will retry and log.
     });
 }
 
@@ -98,9 +94,9 @@ function useLottieAnimation(path: string): object | null {
     return animation;
 }
 
-// The v04 launch compositions animate their own liftoff: ignition at ~1.6s,
-// craft fully off-canvas by ~4.3s, smoke synced to match. We skip the first
-// chunk of that pre-liftoff pause so the rocket reacts faster to the click.
+// The launch compositions animate their own liftoff (ignition ~1.6s, off-canvas
+// by ~4.3s). We skip part of that pre-liftoff pause so the rocket reacts faster
+// to the click.
 const LAUNCH_SKIP_FRAMES = 40; // 60fps composition frames
 // After the rocket has flown off-canvas we hand off to the cutscene overlay
 // (video with skip button -> airlock door transition) rather than navigating
@@ -248,11 +244,10 @@ function Rocket({
     );
 }
 
-// Full-screen overlay played after a rocket launches: video (with skip
-// button) -> airlock doors close over it -> navigate while shut -> doors open
-// onto the destination page (the door overlay itself lives above the router in
-// kidsgo-routes so it survives the navigation). Mounted hidden (`active`
-// false) at rocket-click so its assets load during the launch animation.
+// Full-screen overlay played after a rocket launches: video (with skip button)
+// -> airlock doors close -> navigate while shut -> doors open on the
+// destination page. Mounted hidden (`active` false) at rocket-click so its
+// assets load during the launch animation.
 function Cutscene({
     variant,
     cdnBase,
@@ -303,10 +298,9 @@ function Cutscene({
         }
     }, [active, videoFailed]);
 
-    // Hand off to the global airlock overlay: the doors close over this
-    // (black) overlay, `finish` navigates while they're fully shut, then the
-    // doors open directly onto the destination page. If the animation never
-    // loads, navigate anyway rather than stranding the user on a black screen.
+    // Hand off to the global airlock overlay, which navigates while the doors
+    // are shut. If the animation never loads, navigate anyway rather than
+    // stranding the user on a black screen.
     React.useEffect(() => {
         if (phase !== "airlock" || airlockStartedRef.current) {
             return;
@@ -317,11 +311,8 @@ function Cutscene({
             return;
         }
         const t = setTimeout(() => {
-            // Mark the handoff settled before navigating: the animation may
-            // still be in flight, and without this a JSON that lands after the
-            // fallback re-runs this effect and slides the doors shut over the
-            // page we already navigated to (the overlay is a router-level
-            // singleton, so it outlives this component).
+            // Settle before navigating, or a JSON arriving after this plays
+            // the doors over the page we already navigated to.
             airlockStartedRef.current = true;
             finish();
         }, 3000);
@@ -350,10 +341,9 @@ function Cutscene({
                 playsInline
                 onEnded={endVideo}
                 onError={() => setVideoFailed(true)}
-                // Stays visible through the airlock phase too: the video is
-                // paused (not reset) at the end of the cutscene, so it holds
-                // its last frame for the doors to close over. Hiding it here
-                // exposed the overlay's black background between the doors.
+                // Held through the airlock phase: the video is paused, not
+                // reset, so its last frame stays behind the closing doors
+                // instead of the overlay's black background.
                 className={`cutscene-square cutscene-video ${
                     active && (phase === "video" || phase === "airlock") ? "visible" : ""
                 }`}
@@ -412,10 +402,8 @@ export function LandingPage(): JSX.Element {
     } | null>(null);
     const [cutscene_visible, set_cutscene_visible] = React.useState(false);
 
-    // Gate the whole intro on every asset being ready so that on refresh the
-    // scene never flashes a fully-lit raccoon before the dark-to-bright intro
-    // plays; once true, everything mounts at once and the title intro +
-    // brightening start together.
+    // Gated on every asset being ready, so a refresh never flashes a fully-lit
+    // raccoon before the dark-to-bright intro plays.
     const assets_ready =
         !!starsAnimation &&
         !!raccoonAnimation &&
@@ -426,15 +414,13 @@ export function LandingPage(): JSX.Element {
     // Fallback if an asset fetch fails: show whatever loaded rather than
     // leaving a blank page behind the removed loading screen.
     const [assets_timed_out, set_assets_timed_out] = React.useState(false);
-    // Once the cutscene covers the viewport the scene behind it is invisible,
-    // but its Lotties keep animating and compete for the main thread that the
-    // cutscene and then the airlock doors animate on -- which is what made the
-    // transition choppy on phones. Drop them while the overlay is up.
+    // Dropped while the cutscene covers it: the hidden scene's Lotties keep
+    // animating and compete for the main thread, which made the transition
+    // choppy on phones.
     const show_scene = (assets_ready || assets_timed_out) && !cutscene_visible;
 
-    // kidsgo.tsx leaves the raccoon loading screen up for us; remove it once
-    // our animations are ready (or after a safety timeout / on unmount) so
-    // the intro never flashes the bare blue background.
+    // kidsgo.tsx leaves the raccoon loading screen up for us; remove it only
+    // once our animations are ready, so the intro never flashes bare blue.
     React.useEffect(() => {
         if (assets_ready) {
             hide_loading_screen();
@@ -469,10 +455,8 @@ export function LandingPage(): JSX.Element {
         kidsgo_sfx.play("rocket");
         set_launching(true);
 
-        // Start the airlock JSON now rather than when the Cutscene mounts: on
-        // a phone it otherwise competes with the cutscene video for the
-        // connection and lands late, leaving a gap between the video ending
-        // and the doors appearing.
+        // Fetched now, not at Cutscene mount, so it isn't still in flight when
+        // the video ends and the doors are needed.
         preload_animation(
             `${cdnBase}/pages/home/GFX_TRANSITION_AIRLOCK_${variant}_01_v04_loop.json`,
         );
