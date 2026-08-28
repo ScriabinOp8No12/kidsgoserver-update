@@ -50,18 +50,30 @@ export function playAirlockTransition(animationData: object | null, onClosed: ()
 // navigation that happens mid-transition while the doors are shut.
 export function AirlockTransition(): JSX.Element | null {
     const [request, setRequest] = React.useState<AirlockRequest | null>(null);
-    const phaseRef = React.useRef<"closing" | "opening">("closing");
+    const [phase, setPhase] = React.useState<"closing" | "opening">("closing");
     const lottieRef = React.useRef<LottieRefCurrentProps>(null);
 
     React.useEffect(() => {
         submit_request = (req) => {
-            phaseRef.current = "closing";
+            setPhase("closing");
             setRequest(req);
         };
         return () => {
             submit_request = null;
         };
     }, []);
+
+    // Start the opening animation only once React has committed the
+    // destination page that onClosed() navigated to. Mounting that page is
+    // synchronous work on the same thread Lottie animates on, so opening the
+    // doors in the same tick as the navigation made the animation stutter on
+    // slower devices. The doors cover the viewport while shut, so the extra
+    // commit costs nothing visible.
+    React.useEffect(() => {
+        if (phase === "opening") {
+            lottieRef.current?.playSegments([CLOSE_END_FRAME, 0], true);
+        }
+    }, [phase]);
 
     if (!request) {
         return null;
@@ -76,12 +88,11 @@ export function AirlockTransition(): JSX.Element | null {
                 autoplay={false}
                 onDOMLoaded={() => lottieRef.current?.playSegments([0, CLOSE_END_FRAME], true)}
                 onComplete={() => {
-                    if (phaseRef.current === "closing") {
-                        phaseRef.current = "opening";
-                        // Doors fully shut: swap the page underneath, then
-                        // immediately start opening onto it.
+                    if (phase === "closing") {
+                        // Doors fully shut: swap the page underneath. The
+                        // effect above opens them once that page has mounted.
                         request.onClosed();
-                        lottieRef.current?.playSegments([CLOSE_END_FRAME, 0], true);
+                        setPhase("opening");
                     } else {
                         setRequest(null);
                     }
