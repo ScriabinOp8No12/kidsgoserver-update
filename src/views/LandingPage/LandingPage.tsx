@@ -316,7 +316,15 @@ function Cutscene({
             playAirlockTransition(airlock, finish);
             return;
         }
-        const t = setTimeout(finish, 3000);
+        const t = setTimeout(() => {
+            // Mark the handoff settled before navigating: the animation may
+            // still be in flight, and without this a JSON that lands after the
+            // fallback re-runs this effect and slides the doors shut over the
+            // page we already navigated to (the overlay is a router-level
+            // singleton, so it outlives this component).
+            airlockStartedRef.current = true;
+            finish();
+        }, 3000);
         return () => clearTimeout(t);
     }, [phase, airlock]);
 

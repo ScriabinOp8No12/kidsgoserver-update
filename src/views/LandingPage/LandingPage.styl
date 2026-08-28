@@ -16,7 +16,12 @@
  */
 
 :root {
-    --ROCKETWIDTH: "min(20vw, 10rem)" % "";
+    // Sized off the scene square (min(100vw, 100vh)), the same basis the
+    // background and .rocket-popup use, so the rockets stay a fixed fraction
+    // of the scene at every viewport size. A hard rem cap here used to freeze
+    // them at 160px past ~800px wide, leaving them tiny on large monitors
+    // while the rest of the scene kept growing.
+    --ROCKETWIDTH: "min(20vw, 20vh)" % "";
     --ROCKETHEIGHT: calc(var(--ROCKETWIDTH) * 3);
 }
 
@@ -133,7 +138,12 @@
 
     .learn-to-play-rocket, .play-rocket {
         position: absolute;
-        bottom: calc(var(--ROCKETHEIGHT) * 0.1 + 0.8rem);
+        // Percentage of the scene square so the rockets sit on the green ledge
+        // in the background art at every size. The old value mixed a rocket-
+        // relative term with a fixed 0.8rem, both anchored to the viewport
+        // bottom rather than the ledge, so on large screens the rockets sank
+        // below it. The raccoon platform tracks the same ledge at 8%.
+        bottom: 8%;
         width: var(--ROCKETWIDTH);
         text-align: center;
         height: var(--ROCKETHEIGHT);
@@ -188,12 +198,15 @@
         transform: "translateX(calc(50% - var(--ROCKETWIDTH) * 0.83))" % "";
     }
 
+    // Inset from the scene square's edge, not the viewport, so the rockets sit
+    // in the same spot within the scene at every aspect ratio. .mountain-background
+    // is the square itself, so a percentage here resolves against it.
     .learn-to-play-rocket {
-        left: 5vw;
+        left: 9%;
     }
 
     .play-rocket {
-        right: 5vw;
+        right: 9%;
     }
 }
 
