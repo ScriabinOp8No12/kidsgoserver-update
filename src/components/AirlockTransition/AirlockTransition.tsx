@@ -76,10 +76,19 @@ export function AirlockTransition(): JSX.Element | null {
     // slower devices. The doors cover the viewport while shut, so the extra
     // commit costs nothing visible.
     React.useEffect(() => {
-        if (phase === "opening") {
-            lottieRef.current?.setSpeed(AIRLOCK_SPEED);
-            lottieRef.current?.playSegments([CLOSE_END_FRAME, 0], true);
+        if (phase !== "opening") {
+            return;
         }
+        const lottie = lottieRef.current;
+        if (!lottie) {
+            return;
+        }
+        // playSegments() resets playback state, so re-assert the speed after
+        // it rather than before: setting it first left the open running at the
+        // composition's native 60fps while the close ran slowed, which read as
+        // the doors snapping open on slower devices.
+        lottie.playSegments([CLOSE_END_FRAME, 0], true);
+        lottie.setSpeed(AIRLOCK_SPEED);
     }, [phase]);
 
     if (!request) {
@@ -94,8 +103,8 @@ export function AirlockTransition(): JSX.Element | null {
                 loop={false}
                 autoplay={false}
                 onDOMLoaded={() => {
-                    lottieRef.current?.setSpeed(AIRLOCK_SPEED);
                     lottieRef.current?.playSegments([0, CLOSE_END_FRAME], true);
+                    lottieRef.current?.setSpeed(AIRLOCK_SPEED);
                 }}
                 onComplete={() => {
                     if (phase === "closing") {

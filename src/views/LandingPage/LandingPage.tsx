@@ -32,6 +32,9 @@ const animationCache = new Map<string, object>();
 // would otherwise only fetch once the page renders. Deduped by URL; the map
 // holds the Image handles so in-flight loads can't be garbage collected.
 const preloaded_images = new Map<string, HTMLImageElement>();
+// Paths whose preload fetch is already in flight, so a second click doesn't
+// start a duplicate request before the first lands in animationCache.
+const preloaded_animations = new Set<string>();
 function preload_image(url: string) {
     if (preloaded_images.has(url)) {
         return;
@@ -39,6 +42,21 @@ function preload_image(url: string) {
     const img = new Image();
     img.src = url;
     preloaded_images.set(url, img);
+}
+
+// Warm animationCache ahead of the component that needs the animation, so it
+// is ready the moment that component mounts rather than starting its fetch
+// then. useLottieAnimation() reads the same cache, so a warmed entry means it
+// returns the data on its first render instead of after a round trip.
+function preload_animation(path: string) {
+    if (animationCache.has(path) || preloaded_animations.has(path)) {
+        return;
+    }
+    preloaded_animations.add(path);
+    fetch(path, { credentials: "omit" })
+        .then((r) => r.json())
+        .then((data) => animationCache.set(path, data))
+        .catch(() => preloaded_animations.delete(path));
 }
 
 function useLottieAnimation(path: string): object | null {
@@ -387,7 +405,11 @@ export function LandingPage(): JSX.Element {
     // Fallback if an asset fetch fails: show whatever loaded rather than
     // leaving a blank page behind the removed loading screen.
     const [assets_timed_out, set_assets_timed_out] = React.useState(false);
-    const show_scene = assets_ready || assets_timed_out;
+    // Once the cutscene covers the viewport the scene behind it is invisible,
+    // but its Lotties keep animating and compete for the main thread that the
+    // cutscene and then the airlock doors animate on -- which is what made the
+    // transition choppy on phones. Drop them while the overlay is up.
+    const show_scene = (assets_ready || assets_timed_out) && !cutscene_visible;
 
     // kidsgo.tsx leaves the raccoon loading screen up for us; remove it once
     // our animations are ready (or after a safety timeout / on unmount) so
@@ -425,6 +447,14 @@ export function LandingPage(): JSX.Element {
 
         kidsgo_sfx.play("rocket");
         set_launching(true);
+
+        // Start the airlock JSON now rather than when the Cutscene mounts: on
+        // a phone it otherwise competes with the cutscene video for the
+        // connection and lands late, leaving a gap between the video ending
+        // and the doors appearing.
+        preload_animation(
+            `${cdnBase}/pages/home/GFX_TRANSITION_AIRLOCK_${variant}_01_v04_loop.json`,
+        );
 
         // Warm the destination page's CSS background art (paths mirror the
         // page .styl files) so it isn't laggy when we land on it.
