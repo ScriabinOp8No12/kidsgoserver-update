@@ -34,6 +34,7 @@ import { CharacterSelection } from "./views/CharacterSelection";
 import { HelpPage } from "./views/HelpPage";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { PageNotFound } from "@kidsgo/components/PageNotFound/PageNotFound";
+import { AirlockTransition } from "@kidsgo/components/AirlockTransition";
 import * as sockets from "@/lib/sockets";
 
 /*** Layout our main view and routes ***/
@@ -92,6 +93,10 @@ export const routes = (
                 <Route path="/" element={<Default />} />
                 <Route path="/*" element={<PageNotFound />} />
             </Routes>
+            {/* Mounted outside <Routes> so the airlock door transition
+                survives the navigation that happens while the doors are
+                shut. */}
+            <AirlockTransition />
         </Main>
     </BrowserRouter>
 );

@@ -24,6 +24,7 @@ import { uiClassToRaceIdx, avatar_background_class } from "@kidsgo/components/Av
 import { useUser } from "@/lib/hooks";
 import Lottie, { LottieRefCurrentProps } from "lottie-react";
 import { MatteVideo } from "@kidsgo/components/MatteVideo";
+import { playAirlockTransition } from "@kidsgo/components/AirlockTransition";
 
 const animationCache = new Map<string, object>();
 
@@ -71,8 +72,8 @@ function useLottieAnimation(path: string): object | null {
 // chunk of that pre-liftoff pause so the rocket reacts faster to the click.
 const LAUNCH_SKIP_FRAMES = 40; // 60fps composition frames
 // After the rocket has flown off-canvas we hand off to the cutscene overlay
-// (video with skip button -> one-shot airlock) rather than navigating straight
-// to the page.
+// (video with skip button -> airlock door transition) rather than navigating
+// straight to the page.
 const ROCKET_NAVIGATE_DELAY = 3.8; // seconds; ~4.5s full sequence minus the skip
 // Skip button: the "in" animation runs frames 0-35, then it idles by looping
 // frames 35-176 (matches the After Effects loop expression from the animator).
@@ -208,8 +209,10 @@ function Rocket({
 }
 
 // Full-screen overlay played after a rocket launches: video (with skip
-// button) -> one-shot airlock -> navigate. Mounted hidden (`active` false) at
-// rocket-click so its assets load during the launch animation.
+// button) -> airlock doors close over it -> navigate while shut -> doors open
+// onto the destination page (the door overlay itself lives above the router in
+// kidsgo-routes so it survives the navigation). Mounted hidden (`active`
+// false) at rocket-click so its assets load during the launch animation.
 function Cutscene({
     variant,
     cdnBase,
@@ -230,6 +233,7 @@ function Cutscene({
     const skipRef = React.useRef<LottieRefCurrentProps>(null);
     const videoRef = React.useRef<HTMLVideoElement>(null);
     const doneRef = React.useRef(false);
+    const airlockStartedRef = React.useRef(false);
 
     const [phase, setPhase] = React.useState<"video" | "airlock">("video");
     const [videoFailed, setVideoFailed] = React.useState(false);
@@ -242,7 +246,7 @@ function Cutscene({
         onDone();
     }
 
-    // Video ended, skipped, or failed: hand off to the one-shot airlock.
+    // Video ended, skipped, or failed: hand off to the airlock doors.
     function endVideo() {
         if (phase === "airlock") {
             return;
@@ -259,10 +263,17 @@ function Cutscene({
         }
     }, [active, videoFailed]);
 
-    // If the airlock animation itself failed to load, navigate rather than
-    // stranding the user on a black screen.
+    // Hand off to the global airlock overlay: the doors close over this
+    // (black) overlay, `finish` navigates while they're fully shut, then the
+    // doors open directly onto the destination page. If the animation never
+    // loads, navigate anyway rather than stranding the user on a black screen.
     React.useEffect(() => {
-        if (phase !== "airlock" || airlock) {
+        if (phase !== "airlock" || airlockStartedRef.current) {
+            return;
+        }
+        if (airlock) {
+            airlockStartedRef.current = true;
+            playAirlockTransition(airlock, finish);
             return;
         }
         const t = setTimeout(finish, 3000);
@@ -295,15 +306,6 @@ function Cutscene({
                     active && phase === "video" ? "visible" : ""
                 }`}
             />
-            {active && phase === "airlock" && airlock && (
-                <Lottie
-                    animationData={airlock}
-                    loop={false}
-                    autoplay
-                    onComplete={finish}
-                    className="cutscene-square"
-                />
-            )}
             {active && phase === "video" && skip && (
                 <div className="cutscene-square cutscene-skip" onClick={endVideo}>
                     <Lottie

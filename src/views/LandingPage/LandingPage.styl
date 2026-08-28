@@ -98,6 +98,14 @@
         z-index: 3;
     }
 
+    // The foreground layers hold their own extra darkness after the scene
+    // filter has started lifting, so the light reads as travelling from the
+    // background forward. The raccoon and rockets share one curve so they
+    // brighten at an identical rate. Multiplies with the .scene filter above.
+    .scene.intro-darkened .raccoon-animation {
+        animation: intro-brighten-foreground 4s ease-out forwards;
+    }
+
     // Above the raccoon/stars but below the rockets, so a launching rocket
     // flies over the title/planets. During the intro the .scene filter makes
     // the scene a single layer, so the title still draws on top of it.
@@ -109,6 +117,11 @@
         height: 100%;
         pointer-events: none;
         z-index: z.rocket - 1;
+    }
+
+    .scene.intro-darkened .learn-to-play-rocket,
+    .scene.intro-darkened .play-rocket {
+        animation: intro-brighten-foreground 4s ease-out forwards;
     }
 
     .learn-to-play-rocket, .play-rocket {
@@ -183,7 +196,7 @@
     overflow: hidden;
 }
 
-// The airlock, video and skip art are all square (2400x2400); size each to the
+// The video and skip art are square; size each to the
 // largest square that fits the viewport, centered, matching the home framing.
 .cutscene-square {
     position: absolute;
@@ -236,6 +249,22 @@
     }
     25% {
         filter: brightness(0.06);
+    }
+    100% {
+        filter: brightness(1);
+    }
+}
+
+// Extra darkness held on top of the scene filter, shared by every foreground
+// element. The background lifts first (see intro-brighten); the raccoon and
+// rockets then lighten together on one identical curve, like a single light
+// source reaching everything in front of it at the same moment and rate.
+@keyframes intro-brighten-foreground {
+    0% {
+        filter: brightness(0.15);
+    }
+    40% {
+        filter: brightness(0.15);
     }
     100% {
         filter: brightness(1);
