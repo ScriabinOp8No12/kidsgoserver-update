@@ -218,17 +218,22 @@
 }
 
 // Wraps the skip Lottie. The button art sits centered inside a large transparent
-// canvas, so we shrink the canvas and tuck it into the bottom-right corner (the
-// negative offsets let the empty padding hang off-screen so the button hugs the
-// corner).
+// canvas, so we shrink the canvas and tuck it into the bottom-right corner. The
+// offsets are a share of the canvas itself (not the viewport) so the empty
+// padding hangs off by the same amount at every aspect ratio -- percentage
+// offsets against the full-screen overlay pushed the button clean off the
+// bottom of tall phone viewports. --skip-size tracks the video square rather
+// than the viewport for the same reason.
 .cutscene-skip {
+    --skip-size: "max(120px, min(30vw, 30vh))" % "";
+
     top: auto;
     left: auto;
-    right: -2%;
-    bottom: -6%;
+    right: "calc(var(--skip-size) * -0.08)" % "";
+    bottom: "calc(var(--skip-size) * -0.16)" % "";
     transform: none;
-    width: "min(24vw, 24vh)" % "";
-    height: "min(24vw, 24vh)" % "";
+    width: var(--skip-size);
+    height: var(--skip-size);
     z-index: 1001;
     cursor: pointer;
 
