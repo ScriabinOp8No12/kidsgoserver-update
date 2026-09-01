@@ -100,10 +100,14 @@
         z-index: 3;
     }
 
-    // Foreground holds its own darkness after the scene filter starts lifting,
-    // so the light reads as travelling from the background forward.
-    .scene.intro-darkened .raccoon-animation {
-        animation: intro-brighten-foreground 4s ease-out forwards;
+    // The characters start as pure black cutouts and light up on the same curve
+    // shape as the scene behind them (see intro-brighten-character). They need
+    // their own filter because the scene's can't go to 0 without blacking out
+    // the backdrop art too.
+    .scene.intro-darkened .raccoon-animation,
+    .scene.intro-darkened .learn-to-play-rocket,
+    .scene.intro-darkened .play-rocket {
+        animation: intro-brighten-character 4s ease-out forwards;
     }
 
     // Above the raccoon/stars but below the rockets, so a launching rocket
@@ -117,11 +121,6 @@
         height: 100%;
         pointer-events: none;
         z-index: z.rocket - 1;
-    }
-
-    .scene.intro-darkened .learn-to-play-rocket,
-    .scene.intro-darkened .play-rocket {
-        animation: intro-brighten-foreground 4s ease-out forwards;
     }
 
     // Lifts the hovered rocket above its neighbour: the popup is a child, so
@@ -260,8 +259,10 @@
     }
 }
 
-// Hold the scene as a dark silhouette while the title appears alone,
-// then gradually brighten to full.
+// Hold the scene as a dark silhouette while the title appears alone, then
+// gradually brighten to full. The backdrop can't dim all the way to black
+// without losing the art, so the characters layer their own matching curve on
+// top of this one -- same shape and timing, so everything lights up in step.
 @keyframes intro-brighten {
     0% {
         filter: brightness(0.06);
@@ -274,14 +275,15 @@
     }
 }
 
-// Shared by every foreground element, so they lighten on one identical curve
-// after the background has started lifting (see intro-brighten).
-@keyframes intro-brighten-foreground {
+// Same hold-then-ease shape and timing as intro-brighten, but from true black.
+// Compounds with the scene's filter, so the characters land at full brightness
+// on the same frame the backdrop does.
+@keyframes intro-brighten-character {
     0% {
-        filter: brightness(0.15);
+        filter: brightness(0);
     }
-    40% {
-        filter: brightness(0.15);
+    25% {
+        filter: brightness(0);
     }
     100% {
         filter: brightness(1);
